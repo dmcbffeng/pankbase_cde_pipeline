@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+.pytest_cache/
+.cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Claude Code local settings (keep skills, skip local permissions)
+.claude/settings.local.json
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# Excel temp files
+~$*.xlsx
+~$*.xls
+
+# Pipeline outputs — keep structure via .gitkeep but ignore generated TSVs
+# (Uncomment the next block if you prefer not to version generated outputs)
+# task2_cde_pipeline/output/*.tsv
+# task2_cde_pipeline/output/*.validation_report.txt
+
+# Internal work log / not for public GitHub
+CLAUDE.md
+readme.txt
+cde-deep-research-report.md
+
+# IIDP data is not yet publicly available — do not publish
+data/IIDP_HIPP_Report.xlsx
+task2_cde_pipeline/mappings/iidp_mapping.json
+task2_cde_pipeline/output/iidp_cde_harmonized.tsv
+task2_cde_pipeline/output/iidp_cde_harmonized.validation_report.txt

@@ -1,0 +1,254 @@
+PanKbase CDE Harmonization Validation Report
+Consortium: HPAP
+Source: data/HPAP_Donor_Summary_197.xlsx
+Date: 2026-04-21T17:13:07.700606
+Total records: 197
+Total warnings: 1115
+
+============================================================
+
+Field Completeness:
+  donor_rrid: 195/197 (99.0%)
+  program_donor_id: 197/197 (100.0%)
+  cohort_id: 197/197 (100.0%)
+  sex_at_birth: 197/197 (100.0%)
+  age_years: 197/197 (100.0%)
+  bmi: 197/197 (100.0%)
+  ethnicity: 197/197 (100.0%)
+  race: 197/197 (100.0%)
+  diabetes_status: 197/197 (100.0%)
+  hba1c_percent: 190/197 (96.4%)
+  hba1c_adjusted_diabetes_status: 197/197 (100.0%)
+  glucose_lowering_therapy: 80/197 (40.6%)
+  other_disease_states: 181/197 (91.9%)
+  family_history_diabetes: 110/197 (55.8%)
+  hospital_stay_days: 196/197 (99.5%)
+  donation_type: 197/197 (100.0%)
+  cause_of_death: 197/197 (100.0%)
+  diabetes_duration_years: 80/197 (40.6%)
+  c_peptide_ng_ml: 191/197 (97.0%)
+  aab_gada_positive: 197/197 (100.0%)
+  aab_gada_value: 191/197 (97.0%)
+  aab_iaa_positive: 197/197 (100.0%)
+  aab_iaa_value: 191/197 (97.0%)
+  aab_ia2_positive: 197/197 (100.0%)
+  aab_ia2_value: 191/197 (97.0%)
+  aab_znt8_positive: 197/197 (100.0%)
+  aab_znt8_value: 191/197 (97.0%)
+  isolation_center: 195/197 (99.0%)
+  cold_ischemia_time_hours: 181/197 (91.9%)
+  warm_ischemia_time_hours: 75/197 (38.1%)
+  organ_source: 148/197 (75.1%)
+  pancreas_weight_g: 192/197 (97.5%)
+  islet_viability_pre_percent: 181/197 (91.9%)
+  islet_purity_pre_percent: 0/197 (0.0%)
+  pre_shipment_culture_time_hours: 0/197 (0.0%)
+  pre_shipment_islet_function_available: 197/197 (100.0%)
+  islet_viability_post_percent: 0/197 (0.0%)
+  islet_purity_post_percent: 0/197 (0.0%)
+  total_culture_time_hours: 0/197 (0.0%)
+
+============================================================
+
+Warnings:
+  Record 0 (HPAP-001): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 0 (HPAP-001): Required field 'islet_viability_post_percent' is missing
+  Record 0 (HPAP-001): Required field 'islet_purity_post_percent' is missing
+  Record 0 (HPAP-001): Required field 'total_culture_time_hours' is missing
+  Record 1 (HPAP-002): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 1 (HPAP-002): Required field 'islet_viability_post_percent' is missing
+  Record 1 (HPAP-002): Required field 'islet_purity_post_percent' is missing
+  Record 1 (HPAP-002): Required field 'total_culture_time_hours' is missing
+  Record 2 (HPAP-003): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 2 (HPAP-003): Required field 'islet_viability_post_percent' is missing
+  Record 2 (HPAP-003): Required field 'islet_purity_post_percent' is missing
+  Record 2 (HPAP-003): Required field 'total_culture_time_hours' is missing
+  Record 3 (HPAP-004): Field 'aab_znt8_value' value -0.001 below minimum 0
+  Record 3 (HPAP-004): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 3 (HPAP-004): Required field 'islet_viability_post_percent' is missing
+  Record 3 (HPAP-004): Required field 'islet_purity_post_percent' is missing
+  Record 3 (HPAP-004): Required field 'total_culture_time_hours' is missing
+  Record 4 (HPAP-005): Field 'aab_iaa_value' value -0.001 below minimum 0
+  Record 4 (HPAP-005): Field 'aab_znt8_value' value -0.004 below minimum 0
+  Record 4 (HPAP-005): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 4 (HPAP-005): Required field 'islet_viability_post_percent' is missing
+  Record 4 (HPAP-005): Required field 'islet_purity_post_percent' is missing
+  Record 4 (HPAP-005): Required field 'total_culture_time_hours' is missing
+  Record 5 (HPAP-006): Field 'aab_iaa_value' value -0.003 below minimum 0
+  Record 5 (HPAP-006): Required field 'warm_ischemia_time_hours' is missing
+  Record 5 (HPAP-006): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 5 (HPAP-006): Required field 'islet_viability_post_percent' is missing
+  Record 5 (HPAP-006): Required field 'islet_purity_post_percent' is missing
+  Record 5 (HPAP-006): Required field 'total_culture_time_hours' is missing
+  Record 6 (HPAP-007): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 6 (HPAP-007): Required field 'islet_viability_post_percent' is missing
+  Record 6 (HPAP-007): Required field 'islet_purity_post_percent' is missing
+  Record 6 (HPAP-007): Required field 'total_culture_time_hours' is missing
+  Record 7 (HPAP-008): Field 'aab_iaa_value' value -0.003 below minimum 0
+  Record 7 (HPAP-008): Required field 'warm_ischemia_time_hours' is missing
+  Record 7 (HPAP-008): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 7 (HPAP-008): Required field 'islet_viability_post_percent' is missing
+  Record 7 (HPAP-008): Required field 'islet_purity_post_percent' is missing
+  Record 7 (HPAP-008): Required field 'total_culture_time_hours' is missing
+  Record 8 (HPAP-009): Required field 'hba1c_percent' is missing
+  Record 8 (HPAP-009): Field 'aab_znt8_value' value -0.005 below minimum 0
+  Record 8 (HPAP-009): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 8 (HPAP-009): Required field 'islet_viability_post_percent' is missing
+  Record 8 (HPAP-009): Required field 'islet_purity_post_percent' is missing
+  Record 8 (HPAP-009): Required field 'total_culture_time_hours' is missing
+  Record 9 (HPAP-010): Field 'aab_iaa_value' value -0.006 below minimum 0
+  Record 9 (HPAP-010): Field 'aab_znt8_value' value -0.004 below minimum 0
+  Record 9 (HPAP-010): Required field 'warm_ischemia_time_hours' is missing
+  Record 9 (HPAP-010): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 9 (HPAP-010): Required field 'islet_viability_post_percent' is missing
+  Record 9 (HPAP-010): Required field 'islet_purity_post_percent' is missing
+  Record 9 (HPAP-010): Required field 'total_culture_time_hours' is missing
+  Record 10 (HPAP-011): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 10 (HPAP-011): Required field 'islet_viability_post_percent' is missing
+  Record 10 (HPAP-011): Required field 'islet_purity_post_percent' is missing
+  Record 10 (HPAP-011): Required field 'total_culture_time_hours' is missing
+  Record 11 (HPAP-012): Field 'aab_iaa_value' value -0.001 below minimum 0
+  Record 11 (HPAP-012): Field 'aab_znt8_value' value -0.001 below minimum 0
+  Record 11 (HPAP-012): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 11 (HPAP-012): Required field 'islet_viability_post_percent' is missing
+  Record 11 (HPAP-012): Required field 'islet_purity_post_percent' is missing
+  Record 11 (HPAP-012): Required field 'total_culture_time_hours' is missing
+  Record 12 (HPAP-013): Field 'aab_iaa_value' value -0.003 below minimum 0
+  Record 12 (HPAP-013): Field 'aab_znt8_value' value -0.001 below minimum 0
+  Record 12 (HPAP-013): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 12 (HPAP-013): Required field 'islet_viability_post_percent' is missing
+  Record 12 (HPAP-013): Required field 'islet_purity_post_percent' is missing
+  Record 12 (HPAP-013): Required field 'total_culture_time_hours' is missing
+  Record 13 (HPAP-014): Field 'aab_znt8_value' value -0.001 below minimum 0
+  Record 13 (HPAP-014): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 13 (HPAP-014): Required field 'islet_viability_post_percent' is missing
+  Record 13 (HPAP-014): Required field 'islet_purity_post_percent' is missing
+  Record 13 (HPAP-014): Required field 'total_culture_time_hours' is missing
+  Record 14 (HPAP-015): Required field 'hba1c_percent' is missing
+  Record 14 (HPAP-015): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 14 (HPAP-015): Required field 'islet_viability_post_percent' is missing
+  Record 14 (HPAP-015): Required field 'islet_purity_post_percent' is missing
+  Record 14 (HPAP-015): Required field 'total_culture_time_hours' is missing
+  Record 15 (HPAP-016): Required field 'warm_ischemia_time_hours' is missing
+  Record 15 (HPAP-016): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 15 (HPAP-016): Required field 'islet_viability_post_percent' is missing
+  Record 15 (HPAP-016): Required field 'islet_purity_post_percent' is missing
+  Record 15 (HPAP-016): Required field 'total_culture_time_hours' is missing
+  Record 16 (HPAP-017): Field 'aab_iaa_value' value -0.001 below minimum 0
+  Record 16 (HPAP-017): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 16 (HPAP-017): Required field 'islet_viability_post_percent' is missing
+  Record 16 (HPAP-017): Required field 'islet_purity_post_percent' is missing
+  Record 16 (HPAP-017): Required field 'total_culture_time_hours' is missing
+  Record 17 (HPAP-018): Field 'aab_znt8_value' value -0.007 below minimum 0
+  Record 17 (HPAP-018): Required field 'warm_ischemia_time_hours' is missing
+  Record 17 (HPAP-018): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 17 (HPAP-018): Required field 'islet_viability_post_percent' is missing
+  Record 17 (HPAP-018): Required field 'islet_purity_post_percent' is missing
+  Record 17 (HPAP-018): Required field 'total_culture_time_hours' is missing
+  Record 18 (HPAP-019): Field 'aab_znt8_value' value -0.002 below minimum 0
+  Record 18 (HPAP-019): Required field 'warm_ischemia_time_hours' is missing
+  Record 18 (HPAP-019): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 18 (HPAP-019): Required field 'islet_viability_post_percent' is missing
+  Record 18 (HPAP-019): Required field 'islet_purity_post_percent' is missing
+  Record 18 (HPAP-019): Required field 'total_culture_time_hours' is missing
+  Record 19 (HPAP-020): Required field 'hba1c_percent' is missing
+  Record 19 (HPAP-020): Required field 'warm_ischemia_time_hours' is missing
+  Record 19 (HPAP-020): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 19 (HPAP-020): Required field 'islet_viability_post_percent' is missing
+  Record 19 (HPAP-020): Required field 'islet_purity_post_percent' is missing
+  Record 19 (HPAP-020): Required field 'total_culture_time_hours' is missing
+  Record 20 (HPAP-021): Required field 'hba1c_percent' is missing
+  Record 20 (HPAP-021): Field 'aab_znt8_value' value -0.008 below minimum 0
+  Record 20 (HPAP-021): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 20 (HPAP-021): Required field 'islet_viability_post_percent' is missing
+  Record 20 (HPAP-021): Required field 'islet_purity_post_percent' is missing
+  Record 20 (HPAP-021): Required field 'total_culture_time_hours' is missing
+  Record 21 (HPAP-022): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 21 (HPAP-022): Required field 'islet_viability_post_percent' is missing
+  Record 21 (HPAP-022): Required field 'islet_purity_post_percent' is missing
+  Record 21 (HPAP-022): Required field 'total_culture_time_hours' is missing
+  Record 22 (HPAP-023): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 22 (HPAP-023): Required field 'islet_viability_post_percent' is missing
+  Record 22 (HPAP-023): Required field 'islet_purity_post_percent' is missing
+  Record 22 (HPAP-023): Required field 'total_culture_time_hours' is missing
+  Record 23 (HPAP-024): Required field 'warm_ischemia_time_hours' is missing
+  Record 23 (HPAP-024): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 23 (HPAP-024): Required field 'islet_viability_post_percent' is missing
+  Record 23 (HPAP-024): Required field 'islet_purity_post_percent' is missing
+  Record 23 (HPAP-024): Required field 'total_culture_time_hours' is missing
+  Record 24 (HPAP-025): Required field 'cold_ischemia_time_hours' is missing
+  Record 24 (HPAP-025): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 24 (HPAP-025): Required field 'islet_viability_post_percent' is missing
+  Record 24 (HPAP-025): Required field 'islet_purity_post_percent' is missing
+  Record 24 (HPAP-025): Required field 'total_culture_time_hours' is missing
+  Record 25 (HPAP-026): Required field 'warm_ischemia_time_hours' is missing
+  Record 25 (HPAP-026): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 25 (HPAP-026): Required field 'islet_viability_post_percent' is missing
+  Record 25 (HPAP-026): Required field 'islet_purity_post_percent' is missing
+  Record 25 (HPAP-026): Required field 'total_culture_time_hours' is missing
+  Record 26 (HPAP-027): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 26 (HPAP-027): Required field 'islet_viability_post_percent' is missing
+  Record 26 (HPAP-027): Required field 'islet_purity_post_percent' is missing
+  Record 26 (HPAP-027): Required field 'total_culture_time_hours' is missing
+  Record 27 (HPAP-028): Required field 'warm_ischemia_time_hours' is missing
+  Record 27 (HPAP-028): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 27 (HPAP-028): Required field 'islet_viability_post_percent' is missing
+  Record 27 (HPAP-028): Required field 'islet_purity_post_percent' is missing
+  Record 27 (HPAP-028): Required field 'total_culture_time_hours' is missing
+  Record 28 (HPAP-029): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 28 (HPAP-029): Required field 'islet_viability_post_percent' is missing
+  Record 28 (HPAP-029): Required field 'islet_purity_post_percent' is missing
+  Record 28 (HPAP-029): Required field 'total_culture_time_hours' is missing
+  Record 29 (HPAP-030): Required field 'cold_ischemia_time_hours' is missing
+  Record 29 (HPAP-030): Required field 'warm_ischemia_time_hours' is missing
+  Record 29 (HPAP-030): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 29 (HPAP-030): Required field 'islet_viability_post_percent' is missing
+  Record 29 (HPAP-030): Required field 'islet_purity_post_percent' is missing
+  Record 29 (HPAP-030): Required field 'total_culture_time_hours' is missing
+  Record 30 (HPAP-031): Required field 'cold_ischemia_time_hours' is missing
+  Record 30 (HPAP-031): Required field 'warm_ischemia_time_hours' is missing
+  Record 30 (HPAP-031): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 30 (HPAP-031): Required field 'islet_viability_post_percent' is missing
+  Record 30 (HPAP-031): Required field 'islet_purity_post_percent' is missing
+  Record 30 (HPAP-031): Required field 'total_culture_time_hours' is missing
+  Record 31 (HPAP-032): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 31 (HPAP-032): Required field 'islet_viability_post_percent' is missing
+  Record 31 (HPAP-032): Required field 'islet_purity_post_percent' is missing
+  Record 31 (HPAP-032): Required field 'total_culture_time_hours' is missing
+  Record 32 (HPAP-033): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 32 (HPAP-033): Required field 'islet_viability_post_percent' is missing
+  Record 32 (HPAP-033): Required field 'islet_purity_post_percent' is missing
+  Record 32 (HPAP-033): Required field 'total_culture_time_hours' is missing
+  Record 33 (HPAP-034): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 33 (HPAP-034): Required field 'islet_viability_post_percent' is missing
+  Record 33 (HPAP-034): Required field 'islet_purity_post_percent' is missing
+  Record 33 (HPAP-034): Required field 'total_culture_time_hours' is missing
+  Record 34 (HPAP-035): Required field 'warm_ischemia_time_hours' is missing
+  Record 34 (HPAP-035): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 34 (HPAP-035): Required field 'islet_viability_post_percent' is missing
+  Record 34 (HPAP-035): Required field 'islet_purity_post_percent' is missing
+  Record 34 (HPAP-035): Required field 'total_culture_time_hours' is missing
+  Record 35 (HPAP-036): Required field 'warm_ischemia_time_hours' is missing
+  Record 35 (HPAP-036): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 35 (HPAP-036): Required field 'islet_viability_post_percent' is missing
+  Record 35 (HPAP-036): Required field 'islet_purity_post_percent' is missing
+  Record 35 (HPAP-036): Required field 'total_culture_time_hours' is missing
+  Record 36 (HPAP-037): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 36 (HPAP-037): Required field 'islet_viability_post_percent' is missing
+  Record 36 (HPAP-037): Required field 'islet_purity_post_percent' is missing
+  Record 36 (HPAP-037): Required field 'total_culture_time_hours' is missing
+  Record 37 (HPAP-038): Required field 'warm_ischemia_time_hours' is missing
+  Record 37 (HPAP-038): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 37 (HPAP-038): Required field 'islet_viability_post_percent' is missing
+  Record 37 (HPAP-038): Required field 'islet_purity_post_percent' is missing
+  Record 37 (HPAP-038): Required field 'total_culture_time_hours' is missing
+  Record 38 (HPAP-039): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 38 (HPAP-039): Required field 'islet_viability_post_percent' is missing
+  Record 38 (HPAP-039): Required field 'islet_purity_post_percent' is missing
+  Record 38 (HPAP-039): Required field 'total_culture_time_hours' is missing
+  Record 39 (HPAP-040): Required field 'warm_ischemia_time_hours' is missing
+  Record 39 (HPAP-040): Required field 'pre_shipment_culture_time_hours' is missing
+  Record 39 (HPAP-040): Required field 'islet_viability_post_percent' is missing
+  Record 39 (HPAP-040): Required field 'islet_purity_post_percent' is missing
+  Record 39 (HPAP-040): Required field 'total_culture_time_hours' is missing
+  ... and 915 more

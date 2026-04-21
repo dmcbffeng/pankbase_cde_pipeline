@@ -1,0 +1,237 @@
+{
+  "consortium": "HPAP",
+  "source_description": "Human Pancreas Analysis Program donor summary export",
+  "source_sheet": "donor",
+  "donor_id_column": "donor_ID",
+  "column_mappings": {
+    "donor_rrid": {
+      "source_column": "rrid",
+      "transform": "direct"
+    },
+    "program_donor_id": {
+      "source_column": "donor_ID",
+      "transform": "direct"
+    },
+    "cohort_id": {
+      "source_column": null,
+      "transform": "constant",
+      "constant_value": "HPAP"
+    },
+    "sex_at_birth": {
+      "source_column": "sex",
+      "transform": "value_map",
+      "value_map": {
+        "Male": "Male",
+        "Female": "Female"
+      },
+      "default": "Unknown"
+    },
+    "age_years": {
+      "source_column": "age_years",
+      "transform": "numeric"
+    },
+    "bmi": {
+      "source_column": "bmi",
+      "transform": "numeric"
+    },
+    "ethnicity": {
+      "source_column": "race",
+      "transform": "derive_ethnicity_from_race",
+      "notes": "HPAP 'race' field includes 'Hispanic' which maps to ethnicity. If race='Hispanic', ethnicity='Hispanic or Latino', else 'Not Hispanic or Latino'"
+    },
+    "race": {
+      "source_column": "race",
+      "transform": "value_map",
+      "value_map": {
+        "Caucasian": "White",
+        "African American": "Black or African American",
+        "Asian": "Asian",
+        "American Indian or Alaska Native": "American Indian or Alaska Native",
+        "Biracial": "Multiracial",
+        "Hispanic": "Unknown"
+      },
+      "default": "Unknown",
+      "notes": "Hispanic is an ethnicity not a race; race is unknown when only Hispanic is recorded"
+    },
+    "diabetes_status": {
+      "source_column": "clinical_diagnosis",
+      "transform": "value_map",
+      "value_map": {
+        "T1DM": "Type 1 diabetes (T1D)",
+        "T1DM Recent onset": "Type 1 diabetes (T1D)",
+        "T1DM (recent DKA)": "Type 1 diabetes (T1D)",
+        "Recent T1DM Unsuspected": "Type 1 diabetes (T1D)",
+        "T2DM": "Type 2 diabetes (T2D)",
+        "T2DM Gastric bypass": "Type 2 diabetes (T2D)",
+        "T2DM (? prediabetic)": "Type 2 diabetes (T2D)",
+        "T2DM polycystic ovaries": "Type 2 diabetes (T2D)",
+        "T1D control": "No diabetes",
+        "T2D control": "No diabetes",
+        "T1DM or MODY, undetermined": "Other"
+      },
+      "default": "Unknown"
+    },
+    "hba1c_percent": {
+      "source_column": "hba1c",
+      "transform": "numeric"
+    },
+    "hba1c_adjusted_diabetes_status": {
+      "source_column": "hba1c",
+      "transform": "derive_hba1c_status"
+    },
+    "glucose_lowering_therapy": {
+      "source_column": null,
+      "transform": "lookup_sheet",
+      "lookup_sheet": "medical_history_medications",
+      "lookup_key": "donor_ID",
+      "lookup_filter": {"condition": "Type of Diabetes"},
+      "lookup_value": "medication"
+    },
+    "other_disease_states": {
+      "source_column": null,
+      "transform": "lookup_sheet",
+      "lookup_sheet": "medical_history",
+      "lookup_key": "donor_ID",
+      "lookup_aggregate": "semicolon_join",
+      "lookup_filter_exclude": {"condition": ["Autoimmune disease"]},
+      "lookup_value": "condition"
+    },
+    "family_history_diabetes": {
+      "source_column": null,
+      "transform": "lookup_sheet",
+      "lookup_sheet": "family_medical_history",
+      "lookup_key": "donor_ID",
+      "lookup_filter": {"condition": "Diabetes"},
+      "lookup_value": "value",
+      "post_transform": "yes_no_to_value_list"
+    },
+    "hospital_stay_days": {
+      "source_column": ["admission_datetime_est", "cross_clamp_datetime_est"],
+      "transform": "datetime_diff_days"
+    },
+    "donation_type": {
+      "source_column": ["dbd", "dcd"],
+      "transform": "derive_donation_type",
+      "notes": "If dbd='Yes' -> 'DBD'; if dcd='Yes' -> 'DCD'"
+    },
+    "cause_of_death": {
+      "source_column": "cause_of_death",
+      "transform": "value_map",
+      "value_map": {
+        "Head Trauma": "Head Trauma",
+        "Head trauma": "Head Trauma",
+        "Cerebrovascular/Stroke": "Cerebrovascular/Stroke",
+        "Subarachnoid Hemorrhage": "Cerebrovascular/Stroke",
+        "Anoxia": "Anoxia",
+        "Anoxia 2nd CVA": "Anoxia",
+        "Anoxia/Asthma": "Anoxia",
+        "Anoxia/Cardiovascular": "Anoxia",
+        "Anoxia/DKA": "Anoxia",
+        "DKA": "DKA",
+        "Cerebral Edema (DKA)": "DKA",
+        "GSW": "Head Trauma",
+        "Trauma": "Head Trauma",
+        "Multi System Failure": "Other"
+      },
+      "default": "Unknown"
+    },
+    "diabetes_duration_years": {
+      "source_column": "disease_duration",
+      "transform": "parse_duration_years",
+      "notes": "Source format: '18 years', '5 years', etc. Extract numeric value."
+    },
+    "c_peptide_ng_ml": {
+      "source_column": "c_peptide_ng_ml",
+      "transform": "numeric"
+    },
+    "aab_gada_positive": {
+      "source_column": "aab_gada",
+      "transform": "binary_to_pos_neg",
+      "notes": "Source: 0/1 -> Negative/Positive"
+    },
+    "aab_gada_value": {
+      "source_column": "aab_gada_level",
+      "transform": "parse_value_cutoff",
+      "notes": "Source format: 'value/cutoff' e.g. '119/20'. Extract value before slash."
+    },
+    "aab_iaa_positive": {
+      "source_column": "aab_iaa",
+      "transform": "binary_to_pos_neg"
+    },
+    "aab_iaa_value": {
+      "source_column": "aab_iaa_level",
+      "transform": "parse_value_cutoff"
+    },
+    "aab_ia2_positive": {
+      "source_column": "aab_ia_2",
+      "transform": "binary_to_pos_neg"
+    },
+    "aab_ia2_value": {
+      "source_column": "aab_ia_2_level",
+      "transform": "parse_value_cutoff"
+    },
+    "aab_znt8_positive": {
+      "source_column": "aab_znt8",
+      "transform": "binary_to_pos_neg"
+    },
+    "aab_znt8_value": {
+      "source_column": "aab_znt8_level",
+      "transform": "parse_value_cutoff"
+    },
+    "isolation_center": {
+      "source_column": "allocation_via",
+      "transform": "direct"
+    },
+    "cold_ischemia_time_hours": {
+      "source_column": "cold_ischemia_time_DDHHMMSS",
+      "transform": "timedelta_to_hours",
+      "notes": "Source format: '0 days HH:MM:SS'. Convert to decimal hours."
+    },
+    "warm_ischemia_time_hours": {
+      "source_column": "estimated_downtime_minutes",
+      "transform": "minutes_to_hours"
+    },
+    "organ_source": {
+      "source_column": "recovery_opo",
+      "transform": "direct"
+    },
+    "pancreas_weight_g": {
+      "source_column": "pancreas_weight_trimmed_grams",
+      "transform": "numeric"
+    },
+    "islet_viability_pre_percent": {
+      "source_column": "islet_viability_percent",
+      "transform": "numeric"
+    },
+    "islet_purity_pre_percent": {
+      "source_column": null,
+      "transform": "not_available",
+      "notes": "HPAP does not have a single pre-shipment purity field in the donor sheet"
+    },
+    "pre_shipment_culture_time_hours": {
+      "source_column": null,
+      "transform": "not_available",
+      "notes": "Not directly available in HPAP donor sheet; may be derivable from datetime fields"
+    },
+    "pre_shipment_islet_function_available": {
+      "source_column": "gsir_si",
+      "transform": "presence_to_yes_no",
+      "notes": "If gsir_si has a numeric value -> 'Yes', otherwise 'No'"
+    },
+    "islet_viability_post_percent": {
+      "source_column": null,
+      "transform": "not_available",
+      "notes": "Post-shipment viability not in HPAP donor sheet"
+    },
+    "islet_purity_post_percent": {
+      "source_column": null,
+      "transform": "not_available",
+      "notes": "Post-shipment purity not in HPAP donor sheet"
+    },
+    "total_culture_time_hours": {
+      "source_column": null,
+      "transform": "not_available",
+      "notes": "Not directly available in HPAP donor sheet"
+    }
+  }
+}
