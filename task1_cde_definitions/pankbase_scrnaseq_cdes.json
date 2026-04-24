@@ -1,0 +1,305 @@
+{
+  "schema_version": "0.1",
+  "schema_name": "PanKbase scRNA-seq Metadata CDEs",
+  "created_date": "2026-04-23",
+  "description": "Machine-readable CDE definitions for PanKbase single-cell RNA-seq sample-level experiment and QC metadata. Covers library / platform metadata, alignment QC, cell-calling QC (CellBender), and mitochondrial QC aggregated as per-sample means. Donor-level fields are NOT duplicated here; use donor_rrid_ref to join to the PanKbase donor CDE collection.",
+  "related_schemas": [
+    {
+      "schema_name": "PanKbase Donor Metadata CDEs",
+      "schema_file": "pankbase_donor_cdes.json",
+      "join_key": {
+        "scrnaseq_field": "donor_rrid_ref",
+        "donor_field": "donor_rrid"
+      }
+    }
+  ],
+  "cdes": [
+    {
+      "cde_id": "PKB_S_001",
+      "cde_name": "sample_id",
+      "question_text": "What is the unique identifier for this single-cell RNA-seq sample?",
+      "category": "Sample Identification",
+      "data_type": "text",
+      "required": true,
+      "pankbase_tier": "Required",
+      "unit": null,
+      "permissible_values": null,
+      "notes": "Free-text string. Conventionally formatted as '<donor_id>__<treatment_label>' in PanKbase-contributed datasets but not enforced. Uniqueness is required within a study; global uniqueness is recommended."
+    },
+    {
+      "cde_id": "PKB_S_002",
+      "cde_name": "donor_rrid_ref",
+      "question_text": "What is the RRID of the donor from whom this sample was derived?",
+      "category": "Sample Identification",
+      "data_type": "text",
+      "required": true,
+      "pankbase_tier": "Required",
+      "unit": null,
+      "permissible_values": null,
+      "cross_reference": {
+        "schema": "pankbase_donor_cdes",
+        "cde_id": "PKB_D_001",
+        "cde_name": "donor_rrid",
+        "relationship": "foreign_key",
+        "description": "Links this scRNA-seq sample to the donor record defined in the PanKbase Donor Metadata CDE collection. Value domain (RRID pattern) and semantics are governed by PKB_D_001."
+      },
+      "pattern": "^(RRID:SAMN[0-9]+|SAMN[0-9]+|HP-?[0-9A-Za-z-]+|HPAP-[0-9A-Za-z]+|R[0-9]+)$",
+      "notes": "Accepts either a canonical 'RRID:SAMN########' value, a bare BioSample accession ('SAMN########'), or a consortium-native donor ID (e.g., 'HPAP-019', 'HP-21070-01') when no RRID has been assigned. Downstream tooling should resolve non-RRID values to an RRID by joining to the donor CDE table."
+    },
+    {
+      "cde_id": "PKB_S_003",
+      "cde_name": "study_accession",
+      "question_text": "What is the study or dataset accession that this sample belongs to?",
+      "category": "Sample Identification",
+      "data_type": "text",
+      "required": true,
+      "pankbase_tier": "Required",
+      "unit": null,
+      "permissible_values": null,
+      "pattern": "^(GSE[0-9]+|E-MTAB-[0-9]+|PRJ[A-Z]+[0-9]+|HPAP|[A-Za-z0-9_.-]+)$",
+      "terminology_binding": "NCBI GEO / ArrayExpress / BioProject / internal",
+      "notes": "Accepts GEO (GSE########), ArrayExpress (E-MTAB-####), BioProject (PRJNA######), PanKbase consortium tags (e.g., 'HPAP'), or an internal study identifier."
+    },
+    {
+      "cde_id": "PKB_S_004",
+      "cde_name": "library_chemistry",
+      "question_text": "Which library chemistry version was used to construct this single-cell RNA-seq library?",
+      "category": "Library & Platform",
+      "data_type": "value_list",
+      "required": true,
+      "pankbase_tier": "Required",
+      "unit": null,
+      "permissible_values": ["V1", "V2", "V3", "V3.1", "Multiome", "Other", "Unknown"],
+      "terminology_binding": {
+        "EFO": {
+          "V2": "EFO:0009899",
+          "V3": "EFO:0009922"
+        }
+      },
+      "notes": "Refers to the 10x Genomics single-cell chemistry version when using Chromium; 'Other' is used for alternative protocols (e.g., Smart-seq2, Drop-seq)."
+    },
+    {
+      "cde_id": "PKB_S_005",
+      "cde_name": "library_prep_kit",
+      "question_text": "Which library preparation kit was used for this sample?",
+      "category": "Library & Platform",
+      "data_type": "text",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": null,
+      "permissible_values": null,
+      "notes": "Free text, e.g., '10x Genomics Chromium Single Cell 3' v3'. INFERRED FIELD: not present in the source RDS metadata for metadata_for_DEG.rds; added as a commonly-expected scRNA-seq metadata element that downstream contributors should populate when known."
+    },
+    {
+      "cde_id": "PKB_S_006",
+      "cde_name": "sequencing_platform",
+      "question_text": "Which sequencing platform was used to sequence this library?",
+      "category": "Library & Platform",
+      "data_type": "text",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": null,
+      "permissible_values": null,
+      "terminology_binding": "EFO / OBI (sequencing instrument)",
+      "notes": "Free text, e.g., 'Illumina NovaSeq 6000', 'Illumina HiSeq 4000'. INFERRED FIELD: not present in the source RDS metadata for metadata_for_DEG.rds; added as a commonly-expected scRNA-seq metadata element."
+    },
+    {
+      "cde_id": "PKB_S_007",
+      "cde_name": "alignment_tool",
+      "question_text": "Which tool was used to align and count reads for this sample?",
+      "category": "Library & Platform",
+      "data_type": "value_list",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": null,
+      "permissible_values": ["CellRanger", "STARsolo", "Alevin", "Alevin-fry", "Kallisto|Bustools", "Other", "Unknown"],
+      "notes": "INFERRED FIELD: not present in the source RDS metadata for metadata_for_DEG.rds; added as a commonly-expected scRNA-seq metadata element."
+    },
+    {
+      "cde_id": "PKB_S_008",
+      "cde_name": "reference_genome",
+      "question_text": "Which reference genome build was used for alignment?",
+      "category": "Library & Platform",
+      "data_type": "text",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": null,
+      "permissible_values": null,
+      "notes": "Free text, e.g., 'GRCh38', 'GRCh38-2020-A', 'refdata-gex-GRCh38-2020-A'. INFERRED FIELD: not present in the source RDS metadata for metadata_for_DEG.rds; added as a commonly-expected scRNA-seq metadata element."
+    },
+    {
+      "cde_id": "PKB_S_009",
+      "cde_name": "cellranger_version",
+      "question_text": "If CellRanger was used, which version?",
+      "category": "Library & Platform",
+      "data_type": "text",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": null,
+      "permissible_values": null,
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
+      "notes": "Free text version string, e.g., '7.1.0'. INFERRED FIELD: not present in the source RDS metadata for metadata_for_DEG.rds; added as a commonly-expected scRNA-seq metadata element."
+    },
+    {
+      "cde_id": "PKB_S_010",
+      "cde_name": "n_cells",
+      "question_text": "How many cells passed QC and are included in this sample's expression matrix?",
+      "category": "Cell Calling",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "cells",
+      "min_value": 0,
+      "max_value": 1000000,
+      "precision": 0,
+      "notes": "Post-QC cell count per sample (after doublet removal / ambient RNA correction, if performed). INFERRED FIELD: not present in the source RDS metadata for metadata_for_DEG.rds; added as a commonly-expected scRNA-seq metadata element."
+    },
+    {
+      "cde_id": "PKB_S_011",
+      "cde_name": "mean_umi_count_per_cell",
+      "question_text": "What is the mean UMI (nCount_RNA) count per cell for this sample?",
+      "category": "Sequencing QC",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "UMIs/cell",
+      "min_value": 0,
+      "max_value": 1000000,
+      "precision": 2,
+      "notes": "Mean total UMI counts per cell, computed over cells passing QC. Corresponds to the 'nCount_RNA' column in a Seurat object."
+    },
+    {
+      "cde_id": "PKB_S_012",
+      "cde_name": "mean_genes_per_cell",
+      "question_text": "What is the mean number of detected genes (nFeature_RNA) per cell for this sample?",
+      "category": "Sequencing QC",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "genes/cell",
+      "min_value": 0,
+      "max_value": 100000,
+      "precision": 2,
+      "notes": "Mean number of genes with >0 counts per cell. Corresponds to 'nFeature_RNA' in a Seurat object."
+    },
+    {
+      "cde_id": "PKB_S_013",
+      "cde_name": "mean_total_reads_per_cell",
+      "question_text": "What is the mean number of total sequencing reads per cell for this sample?",
+      "category": "Sequencing QC",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "reads/cell",
+      "min_value": 0,
+      "max_value": 100000000,
+      "precision": 2
+    },
+    {
+      "cde_id": "PKB_S_014",
+      "cde_name": "mean_uniquely_mapped_reads_per_cell",
+      "question_text": "What is the mean number of uniquely mapped reads per cell for this sample?",
+      "category": "Sequencing QC",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "reads/cell",
+      "min_value": 0,
+      "max_value": 100000000,
+      "precision": 2
+    },
+    {
+      "cde_id": "PKB_S_015",
+      "cde_name": "mean_secondary_alignments_per_cell",
+      "question_text": "What is the mean number of secondary alignments per cell?",
+      "category": "Sequencing QC",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "alignments/cell",
+      "min_value": 0,
+      "max_value": 100000000,
+      "precision": 2,
+      "notes": "Reads that mapped to multiple locations in the reference (SAM flag 0x100)."
+    },
+    {
+      "cde_id": "PKB_S_016",
+      "cde_name": "mean_supplementary_alignments_per_cell",
+      "question_text": "What is the mean number of supplementary (chimeric) alignments per cell?",
+      "category": "Sequencing QC",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "alignments/cell",
+      "min_value": 0,
+      "max_value": 100000000,
+      "precision": 2,
+      "notes": "Typically 0 for standard scRNA-seq pipelines (SAM flag 0x800). Retained for forward compatibility with datasets that report it."
+    },
+    {
+      "cde_id": "PKB_S_017",
+      "cde_name": "mean_cellbender_cell_probability",
+      "question_text": "What is the mean CellBender cell-probability score across cells in this sample?",
+      "category": "Ambient RNA (CellBender)",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": null,
+      "min_value": 0.0,
+      "max_value": 1.0,
+      "precision": 6,
+      "notes": "Output of CellBender's remove-background workflow: posterior probability that a barcode represents a real cell rather than empty droplet / ambient RNA. Typical QC-passing samples have mean values very close to 1."
+    },
+    {
+      "cde_id": "PKB_S_018",
+      "cde_name": "mean_post_cellbender_umis_per_cell",
+      "question_text": "What is the mean post-CellBender UMI count per cell?",
+      "category": "Ambient RNA (CellBender)",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "UMIs/cell",
+      "min_value": 0,
+      "max_value": 1000000,
+      "precision": 2,
+      "notes": "Mean UMIs per cell after CellBender removes ambient RNA contamination; should be less than or equal to mean_umi_count_per_cell."
+    },
+    {
+      "cde_id": "PKB_S_019",
+      "cde_name": "mean_pct_cellbender_removed",
+      "question_text": "What percentage of UMIs was removed on average per cell by CellBender?",
+      "category": "Ambient RNA (CellBender)",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "%",
+      "unit_ucum": "%",
+      "min_value": 0.0,
+      "max_value": 100.0,
+      "precision": 4,
+      "notes": "Mean percentage of UMIs per cell attributed to ambient RNA and removed by CellBender."
+    },
+    {
+      "cde_id": "PKB_S_020",
+      "cde_name": "mean_pct_mitochondrial_reads",
+      "question_text": "What is the mean percentage of reads mapping to mitochondrial genes per cell?",
+      "category": "Mitochondrial QC",
+      "data_type": "number",
+      "required": false,
+      "pankbase_tier": "Desired",
+      "unit": "%",
+      "unit_ucum": "%",
+      "min_value": 0.0,
+      "max_value": 100.0,
+      "precision": 4,
+      "notes": "High values (>20%) typically indicate stressed or dying cells and are commonly used as a per-cell QC filter."
+    }
+  ],
+  "version_history": [
+    {
+      "version": "0.1",
+      "date": "2026-04-23",
+      "changes": "Initial draft. 20 CDEs derived from metadata_for_DEG.rds (13 observed columns) plus 1 cross-reference to the donor CDE collection and 6 inferred fields commonly expected in scRNA-seq metadata (library_prep_kit, sequencing_platform, alignment_tool, reference_genome, cellranger_version, n_cells). Inferred fields are documented as such in their 'notes' field and marked as 'Desired' tier. Expected to evolve after collaborator review; fields may be added, removed, or re-tiered."
+    }
+  ]
+}

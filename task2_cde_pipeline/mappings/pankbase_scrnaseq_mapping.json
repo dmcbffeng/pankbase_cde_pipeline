@@ -1,0 +1,96 @@
+{
+  "consortium": "PanKbase-scRNAseq",
+  "data_format": "rds",
+  "description": "Column-to-CDE mapping for the reference PanKbase scRNA-seq sample metadata RDS (data/metadata_for_DEG.rds, 227 samples x 26 cols). Maps 13 observed scRNA-seq columns to PKB_S_00x CDEs and leaves 6 inferred CDEs empty (not in source). Donor / islet-isolation / treatment columns are intentionally skipped (see project instruction).",
+  "record_id_column": "samples",
+  "column_mappings": {
+    "sample_id": {
+      "source_column": "samples",
+      "transform": "direct"
+    },
+    "donor_rrid_ref": {
+      "source_column": "rrid",
+      "transform": "direct"
+    },
+    "study_accession": {
+      "source_column": "study",
+      "transform": "direct"
+    },
+    "library_chemistry": {
+      "source_column": "chemistry",
+      "transform": "value_map",
+      "value_map": {
+        "V1": "V1",
+        "V2": "V2",
+        "V3": "V3",
+        "V3.1": "V3.1",
+        "Multiome": "Multiome"
+      },
+      "default": "Unknown"
+    },
+    "library_prep_kit": {
+      "transform": "not_available",
+      "_note": "Inferred CDE; not present in the source RDS."
+    },
+    "sequencing_platform": {
+      "transform": "not_available",
+      "_note": "Inferred CDE; not present in the source RDS."
+    },
+    "alignment_tool": {
+      "transform": "not_available",
+      "_note": "Inferred CDE; not present in the source RDS."
+    },
+    "reference_genome": {
+      "transform": "not_available",
+      "_note": "Inferred CDE; not present in the source RDS."
+    },
+    "cellranger_version": {
+      "transform": "not_available",
+      "_note": "Inferred CDE; not present in the source RDS."
+    },
+    "n_cells": {
+      "transform": "not_available",
+      "_note": "Inferred CDE; not present in the source RDS."
+    },
+    "mean_umi_count_per_cell": {
+      "source_column": "mean_nCount_RNA",
+      "transform": "numeric"
+    },
+    "mean_genes_per_cell": {
+      "source_column": "mean_nFeature_RNA",
+      "transform": "numeric"
+    },
+    "mean_total_reads_per_cell": {
+      "source_column": "mean_rna_total_reads",
+      "transform": "numeric"
+    },
+    "mean_uniquely_mapped_reads_per_cell": {
+      "source_column": "mean_rna_uniquely_mapped_reads",
+      "transform": "numeric"
+    },
+    "mean_secondary_alignments_per_cell": {
+      "source_column": "mean_rna_secondary_alignments",
+      "transform": "numeric"
+    },
+    "mean_supplementary_alignments_per_cell": {
+      "source_column": "mean_rna_supplementary_alignments",
+      "transform": "numeric"
+    },
+    "mean_cellbender_cell_probability": {
+      "source_column": "mean_cell_probability",
+      "transform": "numeric"
+    },
+    "mean_post_cellbender_umis_per_cell": {
+      "source_column": "mean_post_cellbender_umis",
+      "transform": "numeric"
+    },
+    "mean_pct_cellbender_removed": {
+      "source_column": "mean_pct_cellbender_removed",
+      "transform": "numeric"
+    },
+    "mean_pct_mitochondrial_reads": {
+      "source_column": "mean_rna_pct_mitochondrial",
+      "transform": "numeric"
+    }
+  }
+}

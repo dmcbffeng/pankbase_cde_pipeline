@@ -1,0 +1,35 @@
+PanKbase CDE Harmonization Validation Report
+Consortium: PanKbase-scRNAseq
+Source: data/metadata_for_DEG.rds
+Date: 2026-04-23T20:33:04.644823
+Total records: 227
+Total warnings: 0
+
+============================================================
+
+Field Completeness:
+  sample_id: 227/227 (100.0%)
+  donor_rrid_ref: 227/227 (100.0%)
+  study_accession: 227/227 (100.0%)
+  library_chemistry: 227/227 (100.0%)
+  library_prep_kit: 0/227 (0.0%)
+  sequencing_platform: 0/227 (0.0%)
+  alignment_tool: 0/227 (0.0%)
+  reference_genome: 0/227 (0.0%)
+  cellranger_version: 0/227 (0.0%)
+  n_cells: 0/227 (0.0%)
+  mean_umi_count_per_cell: 227/227 (100.0%)
+  mean_genes_per_cell: 227/227 (100.0%)
+  mean_total_reads_per_cell: 227/227 (100.0%)
+  mean_uniquely_mapped_reads_per_cell: 227/227 (100.0%)
+  mean_secondary_alignments_per_cell: 227/227 (100.0%)
+  mean_supplementary_alignments_per_cell: 227/227 (100.0%)
+  mean_cellbender_cell_probability: 227/227 (100.0%)
+  mean_post_cellbender_umis_per_cell: 227/227 (100.0%)
+  mean_pct_cellbender_removed: 227/227 (100.0%)
+  mean_pct_mitochondrial_reads: 227/227 (100.0%)
+
+============================================================
+
+Warnings:
+  No warnings.

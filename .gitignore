@@ -37,6 +37,10 @@ env/
 ~$*.xlsx
 ~$*.xls
 
+# NFS / filesystem temp files
+.nfs*
+**/.nfs*
+
 # Pipeline outputs — keep structure via .gitkeep but ignore generated TSVs
 # (Uncomment the next block if you prefer not to version generated outputs)
 # task2_cde_pipeline/output/*.tsv
@@ -46,6 +50,7 @@ env/
 CLAUDE.md
 readme.txt
 cde-deep-research-report.md
+PANKBASE META DATA_MB.xlsx
 
 # IIDP data is not yet publicly available — do not publish
 data/IIDP_HIPP_Report.xlsx

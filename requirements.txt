@@ -1,1 +1,4 @@
 openpyxl>=3.0.0
+# Required only when loading R .rds metadata files (e.g., scRNA-seq sample metadata).
+# If you only process Excel donor spreadsheets you can omit pyreadr.
+pyreadr>=0.4.0

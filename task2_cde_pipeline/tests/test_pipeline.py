@@ -9,19 +9,22 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 PIPELINE = ROOT / "task2_cde_pipeline" / "pipeline.py"
 CDE = ROOT / "task1_cde_definitions" / "pankbase_donor_cdes.json"
+SCRNA_CDE = ROOT / "task1_cde_definitions" / "pankbase_scrnaseq_cdes.json"
 HPAP_DATA = ROOT / "data" / "HPAP_Donor_Summary_197.xlsx"
 IIDP_DATA = ROOT / "data" / "IIDP_HIPP_Report.xlsx"
+SCRNA_DATA = ROOT / "data" / "metadata_for_DEG.rds"
 HPAP_MAP = ROOT / "task2_cde_pipeline" / "mappings" / "hpap_mapping.json"
 IIDP_MAP = ROOT / "task2_cde_pipeline" / "mappings" / "iidp_mapping.json"
+SCRNA_MAP = ROOT / "task2_cde_pipeline" / "mappings" / "pankbase_scrnaseq_mapping.json"
 
 
-def run_pipeline(data, mapping, output):
+def run_pipeline(data, mapping, output, cde=None):
     result = subprocess.run(
         [
             sys.executable, str(PIPELINE),
             "--data", str(data),
             "--mapping", str(mapping),
-            "--cde", str(CDE),
+            "--cde", str(cde or CDE),
             "--output", str(output),
         ],
         capture_output=True, text=True,
@@ -63,6 +66,48 @@ def test_iidp_harmonization(tmp_path):
     lines = output.read_text().strip().split("\n")
     assert len(lines) >= 500
     assert "Harmonized" in stdout
+
+
+@pytest.mark.skipif(
+    not SCRNA_DATA.exists() or not SCRNA_MAP.exists(),
+    reason="scRNA-seq RDS / mapping not present",
+)
+def test_scrnaseq_schema_loads():
+    with open(SCRNA_CDE) as f:
+        schema = json.load(f)
+    assert schema["schema_name"] == "PanKbase scRNA-seq Metadata CDEs"
+    names = {c["cde_name"] for c in schema["cdes"]}
+    assert {
+        "sample_id",
+        "donor_rrid_ref",
+        "study_accession",
+        "library_chemistry",
+        "mean_umi_count_per_cell",
+    }.issubset(names)
+    # donor_rrid_ref carries a cross_reference block
+    cross = next(c for c in schema["cdes"] if c["cde_name"] == "donor_rrid_ref")
+    assert cross["cross_reference"]["cde_id"] == "PKB_D_001"
+
+
+@pytest.mark.skipif(
+    not SCRNA_DATA.exists() or not SCRNA_MAP.exists(),
+    reason="scRNA-seq RDS / mapping not present",
+)
+def test_scrnaseq_harmonization(tmp_path):
+    try:
+        import pyreadr  # noqa: F401
+    except ImportError:
+        pytest.skip("pyreadr not installed")
+    output = tmp_path / "scrnaseq.tsv"
+    stdout = run_pipeline(SCRNA_DATA, SCRNA_MAP, output, cde=SCRNA_CDE)
+    assert output.exists()
+    text = output.read_text()
+    header = text.split("\n")[0].split("\t")
+    assert "sample_id" in header
+    assert "donor_rrid_ref" in header
+    assert "mean_umi_count_per_cell" in header
+    assert "Loaded 227 source records" in stdout
+    assert "Harmonized 227 records" in stdout
 
 
 def test_value_maps_applied(tmp_path):

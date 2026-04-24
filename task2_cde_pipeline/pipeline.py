@@ -2,18 +2,36 @@
 """
 PanKbase CDE Harmonization Pipeline
 
-Reads raw consortia data (Excel) and a consortia-specific mapping config,
-then extracts and transforms donor metadata into a clean, CDE-matched table.
+Reads raw consortia data (Excel .xlsx / R .rds) and a consortium-or-dataset-specific
+mapping config, then extracts and transforms the source records into a clean,
+CDE-matched table against any PanKbase CDE schema (donor-level or scRNA-seq).
+
+Supported input formats:
+    - .xlsx / .xls (openpyxl) — donor spreadsheets (HPAP, IIDP, ...)
+    - .rds          (pyreadr) — R data.frame, e.g., per-sample scRNA-seq metadata
+
+Supported CDE schemas:
+    - pankbase_donor_cdes.json      (donor-level, e.g., HPAP, IIDP)
+    - pankbase_scrnaseq_cdes.json   (scRNA-seq sample-level)
+    - Any schema matching the same shape (schema_version, schema_name, cdes[...])
 
 Usage:
-    python pipeline.py --data <data.xlsx> --mapping <mapping.json> --cde <cde_schema.json> --output <output.tsv>
+    python pipeline.py --data <data.(xlsx|rds)> --mapping <mapping.json> \\
+                       --cde <cde_schema.json> --output <output.tsv>
 
-Example:
-    python pipeline.py \
-        --data ../data/HPAP_Donor_Summary_197.xlsx \
-        --mapping mappings/hpap_mapping.json \
-        --cde ../task1_cde_definitions/pankbase_donor_cdes.json \
+Examples (donor):
+    python pipeline.py \\
+        --data ../data/HPAP_Donor_Summary_197.xlsx \\
+        --mapping mappings/hpap_mapping.json \\
+        --cde ../task1_cde_definitions/pankbase_donor_cdes.json \\
         --output output/hpap_cde_harmonized.tsv
+
+Examples (scRNA-seq):
+    python pipeline.py \\
+        --data ../data/metadata_for_DEG.rds \\
+        --mapping mappings/pankbase_scrnaseq_mapping.json \\
+        --cde ../task1_cde_definitions/pankbase_scrnaseq_cdes.json \\
+        --output output/scrnaseq_cde_harmonized.tsv
 """
 
 import argparse
@@ -24,6 +42,13 @@ from datetime import datetime
 from pathlib import Path
 
 import openpyxl
+
+try:
+    import pyreadr  # type: ignore
+    _HAVE_PYREADR = True
+except ImportError:
+    pyreadr = None
+    _HAVE_PYREADR = False
 
 
 # ---------------------------------------------------------------------------
@@ -279,6 +304,49 @@ def load_hpap_data(filepath, mapping):
     return rows, lookup_sheets
 
 
+def load_rds_data(filepath, mapping):
+    """Load an R .rds file containing a single data.frame (or the first data.frame
+    found) and return rows as list[dict] plus an empty lookup_sheets dict.
+
+    Used for scRNA-seq sample-level metadata (e.g., metadata_for_DEG.rds).
+    """
+    if not _HAVE_PYREADR:
+        raise RuntimeError(
+            "Reading .rds input requires the 'pyreadr' package. "
+            "Install with: pip install pyreadr"
+        )
+    result = pyreadr.read_r(str(filepath))
+    target = mapping.get("rds_object_name")
+    if target and target in result:
+        df = result[target]
+    else:
+        # Use the first (and typically only) object in the RDS
+        if not result:
+            raise RuntimeError(f"No R objects found in {filepath}")
+        df = next(iter(result.values()))
+
+    # Normalize to list[dict], converting NaN / 'NA' sentinels to None
+    rows = []
+    columns = list(df.columns)
+    for _, row in df.iterrows():
+        record = {}
+        for col in columns:
+            v = row[col]
+            # Pandas NaN check (works on float NaN)
+            try:
+                import math
+                if isinstance(v, float) and math.isnan(v):
+                    v = None
+            except Exception:
+                pass
+            # Treat literal string NA sentinels as missing
+            if isinstance(v, str) and v.strip().upper() in ("NA", "N/A", "NAN", ""):
+                v = None
+            record[col] = v
+        rows.append(record)
+    return rows, {}
+
+
 def load_iidp_data(filepath, mapping):
     """Load IIDP-style data (positional columns with offset header row)."""
     wb = openpyxl.load_workbook(filepath, data_only=True)
@@ -448,15 +516,36 @@ def run_pipeline(data_path, mapping_path, cde_path, output_path):
         cde_schema = json.load(f)
 
     consortium = mapping.get("consortium", "Unknown")
-    print(f"[Pipeline] Consortium: {consortium}")
+    schema_name = cde_schema.get("schema_name", "Unknown schema")
+    print(f"[Pipeline] Consortium / dataset: {consortium}")
+    print(f"[Pipeline] CDE schema: {schema_name}")
     print(f"[Pipeline] Loading data from: {data_path}")
 
-    # Load source data
-    if consortium == "IIDP":
-        source_rows, lookup_sheets = load_iidp_data(data_path, mapping)
-    else:
-        source_rows, lookup_sheets = load_hpap_data(data_path, mapping)
+    # Pick loader: explicit mapping.data_format wins, else infer from file extension,
+    # else fall back to the legacy consortium-based dispatch (IIDP vs HPAP).
+    data_format = mapping.get("data_format")
+    if not data_format:
+        ext = Path(str(data_path)).suffix.lower()
+        if ext == ".rds":
+            data_format = "rds"
+        elif consortium == "IIDP":
+            data_format = "iidp_excel"
+        else:
+            data_format = "hpap_excel"
 
+    if data_format == "rds":
+        source_rows, lookup_sheets = load_rds_data(data_path, mapping)
+    elif data_format == "iidp_excel":
+        source_rows, lookup_sheets = load_iidp_data(data_path, mapping)
+    elif data_format == "hpap_excel":
+        source_rows, lookup_sheets = load_hpap_data(data_path, mapping)
+    else:
+        raise ValueError(
+            f"Unknown data_format '{data_format}'. "
+            "Supported: 'rds', 'hpap_excel', 'iidp_excel'."
+        )
+
+    print(f"[Pipeline] Data format: {data_format}")
     print(f"[Pipeline] Loaded {len(source_rows)} source records")
 
     # Get the ordered list of CDE field names
@@ -467,14 +556,16 @@ def run_pipeline(data_path, mapping_path, cde_path, output_path):
     harmonized = []
     all_warnings = []
 
+    # Per-record identifier used both for lookup_sheet joins and for labeling
+    # validation warnings. Accepts legacy 'donor_id_column' alias.
+    id_col_key = mapping.get("record_id_column", mapping.get("donor_id_column", "donor_ID"))
+
     for i, record in enumerate(source_rows):
-        # Get donor ID for lookups
         if isinstance(record, dict):
-            donor_id_col = mapping.get("donor_id_column", "donor_ID")
-            donor_id = record.get(donor_id_col)
+            donor_id = record.get(id_col_key)
         else:
-            donor_id_col = mapping.get("donor_id_column", 0)
-            donor_id = record[donor_id_col] if donor_id_col < len(record) else None
+            idx = id_col_key if isinstance(id_col_key, int) else 0
+            donor_id = record[idx] if idx < len(record) else None
 
         output_record = {}
 
