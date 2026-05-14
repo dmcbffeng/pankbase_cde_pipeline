@@ -18,9 +18,11 @@ Harmonize a consortia / dataset data file to PanKbase CDEs in one step.
 
 ### 1. Detect file type → CDE schema
 
-- `.xlsx` / `.xls` → `task1_cde_definitions/pankbase_donor_cdes.json` (donor schema)
-- `.rds` → `task1_cde_definitions/pankbase_scrnaseq_cdes.json` (scRNA-seq schema)
-- If the file is an Excel but clearly holds scRNA-seq metadata (e.g., per-sample QC), ask the user which schema to target instead of guessing.
+- `.xlsx` / `.xls` → inspect column names:
+  - Donor fields (Age, BMI, Sex, RRID, diabetes status) → `task1_cde_definitions/pankbase_donor_cdes.json`
+  - scRNA-seq fields (modality, assay platform, reagent kit, sequencing instrument, genome build, etc.) → `task1_cde_definitions/pankbase_scrnaseq_cdes.json`
+- `.rds` → R tabular export; inspect columns to pick the right CDE schema (donor or scRNA-seq).
+- If uncertain, ask the user which schema to target instead of guessing.
 
 ### 2. Check for an existing mapping
 

@@ -28,15 +28,19 @@ python pipeline.py \
     --output output/hpap_cde_harmonized.tsv
 ```
 
-### scRNA-seq sample metadata (PanKbase reference RDS)
+### scRNA-seq sample metadata
+
+The scRNA-seq CDE schema (v0.2) is sourced from a collaborator-curated metadata spreadsheet. No reference mapping is shipped — provide your own:
 
 ```bash
 python pipeline.py \
-    --data ../data/metadata_for_DEG.rds \
-    --mapping mappings/pankbase_scrnaseq_mapping.json \
+    --data path/to/your_scrnaseq_metadata.xlsx \
+    --mapping mappings/<your_mapping>.json \
     --cde ../task1_cde_definitions/pankbase_scrnaseq_cdes.json \
-    --output output/scrnaseq_cde_harmonized.tsv
+    --output output/<your_dataset>_cde_harmonized.tsv
 ```
+
+Use `hpap_mapping.json` as a structural template, or run `/generate-mapping` (Claude Code) to auto-draft one.
 
 ## Requirements
 
@@ -184,32 +188,32 @@ The output TSV has one row per source record and one column per CDE in the suppl
 | islet_purity_post_percent | Transportation | Number |
 | total_culture_time_hours | Transportation | Number |
 
-### scRNA-seq schema (`pankbase_scrnaseq_cdes.json`) — 20 columns
+### scRNA-seq schema (`pankbase_scrnaseq_cdes.json`, v0.2) — 20 columns
 
 | Column | Category | Type |
 |--------|----------|------|
 | sample_id | Sample Identification | Text |
 | donor_rrid_ref | Sample Identification (FK → donor PKB_D_001) | Text |
-| study_accession | Sample Identification | Text |
-| library_chemistry | Library & Platform | Value List |
-| library_prep_kit | Library & Platform (inferred) | Text |
-| sequencing_platform | Library & Platform (inferred) | Text |
-| alignment_tool | Library & Platform (inferred) | Value List |
-| reference_genome | Library & Platform (inferred) | Text |
-| cellranger_version | Library & Platform (inferred) | Text |
-| n_cells | Cell Calling (inferred) | Number |
-| mean_umi_count_per_cell | Sequencing QC | Number |
-| mean_genes_per_cell | Sequencing QC | Number |
-| mean_total_reads_per_cell | Sequencing QC | Number |
-| mean_uniquely_mapped_reads_per_cell | Sequencing QC | Number |
-| mean_secondary_alignments_per_cell | Sequencing QC | Number |
-| mean_supplementary_alignments_per_cell | Sequencing QC | Number |
-| mean_cellbender_cell_probability | Ambient RNA (CellBender) | Number |
-| mean_post_cellbender_umis_per_cell | Ambient RNA (CellBender) | Number |
-| mean_pct_cellbender_removed | Ambient RNA (CellBender) | Number |
-| mean_pct_mitochondrial_reads | Mitochondrial QC | Number |
+| assay_resolution | Single Cell/Nucleus Preparation | Value List |
+| modality | Single Cell/Nucleus Preparation | Value List |
+| assay_platform | Single Cell/Nucleus Preparation | Value List |
+| reagent_kit | Single Cell/Nucleus Preparation | Text |
+| treatment_protocol | Single Cell/Nucleus Preparation | Text |
+| growth_protocol | Single Cell/Nucleus Preparation | Text |
+| extracted_molecule | Single Cell/Nucleus Preparation | Value List |
+| extraction_protocol | Single Cell/Nucleus Preparation | Text |
+| library_construction_protocol | Single Cell/Nucleus Preparation | Text |
+| library_selection | Single Cell/Nucleus Preparation | Value List |
+| sequencing_run_type | Single Cell/Nucleus Preparation | Value List |
+| sequencing_instrument | Single Cell/Nucleus Preparation | Text |
+| read_length_configuration | Single Cell/Nucleus Preparation | Text |
+| demultiplexed_read_lengths | Single Cell/Nucleus Preparation | Text |
+| number_of_target_cells | Single Cell/Nucleus Preparation | Number |
+| processing_workflow_overview | Processing Steps | Text |
+| processing_workflow_code | Processing Steps | Text |
+| genome_build | Processing Steps | Text |
 
-Fields marked "inferred" are not present in the reference RDS; they are expected commonly-reported scRNA-seq metadata that downstream contributors can populate.
+Field list sourced from a collaborator-curated metadata spreadsheet. `sample_id` and `donor_rrid_ref` are identifier CDEs added so the schema can be used in practice and joined back to the donor CDE collection.
 
 ## Joining scRNA-seq samples to donor metadata
 
@@ -218,7 +222,7 @@ The scRNA-seq CDE collection intentionally does NOT redefine donor-level fields 
 ```python
 import pandas as pd
 donors = pd.read_csv("output/hpap_cde_harmonized.tsv", sep="\t")
-samples = pd.read_csv("output/scrnaseq_cde_harmonized.tsv", sep="\t")
+samples = pd.read_csv("output/<your_dataset>_cde_harmonized.tsv", sep="\t")
 merged = samples.merge(donors, left_on="donor_rrid_ref", right_on="donor_rrid", how="left")
 ```
 

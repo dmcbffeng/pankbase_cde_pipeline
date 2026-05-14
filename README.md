@@ -5,11 +5,11 @@ Common Data Elements (CDEs) and a harmonization pipeline for pancreas research m
 Currently ships two CDE collections:
 
 1. **PanKbase Donor Metadata CDEs (v1.0)** — 34 CDEs for pancreas donor demographics, medical history, autoantibodies, isolation, and transportation.
-2. **PanKbase scRNA-seq Metadata CDEs (v0.1)** — 20 CDEs for single-cell RNA-seq sample-level experiment and QC metadata (library chemistry, per-sample UMI/gene/read metrics, CellBender ambient-RNA QC, mitochondrial QC). Links back to donor CDEs via a `donor_rrid_ref` foreign-key CDE rather than duplicating donor fields.
+2. **PanKbase scRNA-seq Metadata CDEs (v0.2)** — 20 CDEs for single-cell / single-nucleus RNA-seq sample-level metadata (assay resolution, modality, platform, reagent kit, library construction, sequencing run configuration, and processing-step pointers). The field list is sourced from a collaborator-curated metadata spreadsheet. Links back to donor CDEs via a `donor_rrid_ref` foreign-key CDE rather than duplicating donor fields.
 
 ## Features
 
-- **54 formal CDEs** across both collections, in NIH CDE format (ISO/IEC 11179-aligned) with permissible values, UCUM units, and terminology bindings (MONDO, LOINC, NCIt, EFO)
+- **54 formal CDEs** across both collections, in NIH CDE format (ISO/IEC 11179-aligned) with permissible values, UCUM units, and terminology bindings (MONDO, LOINC, NCIt, EFO/OBI)
 - **Deterministic harmonization pipeline** — converts raw consortia Excel (`.xlsx`) or R (`.rds`) metadata files to clean, CDE-matched TSVs
 - **Per-consortium / per-dataset mapping configs** — add new consortia or new assay types by writing a JSON mapping (no code changes)
 - **Cross-collection linking** — scRNA-seq samples join to donor records via `donor_rrid_ref` (PKB_S_002 → PKB_D_001), avoiding duplicated donor fields
@@ -60,36 +60,19 @@ First few rows:
 | RRID:SAMN18741941 | HPAP-003 | HPAP | Male | 29 | 24.5 | No diabetes | 5.6 |
 | RRID:SAMN19776437 | HPAP-004 | HPAP | Female | 24 | 32.2 | No diabetes | 5.4 |
 
-### scRNA-seq sample metadata (reference RDS)
+### scRNA-seq sample metadata
 
-Harmonize the reference PanKbase scRNA-seq RDS (227 samples) to the scRNA-seq CDE schema:
+The scRNA-seq CDE schema (`task1_cde_definitions/pankbase_scrnaseq_cdes.json`) defines 20 fields covering sample identification, single cell/nucleus preparation, and processing steps. To harmonize a scRNA-seq dataset to this schema, supply your own mapping JSON and an Excel or RDS metadata file:
 
 ```bash
 python3 task2_cde_pipeline/pipeline.py \
-    --data data/metadata_for_DEG.rds \
-    --mapping task2_cde_pipeline/mappings/pankbase_scrnaseq_mapping.json \
+    --data path/to/your_scrnaseq_metadata.xlsx \
+    --mapping task2_cde_pipeline/mappings/<your_mapping>.json \
     --cde task1_cde_definitions/pankbase_scrnaseq_cdes.json \
-    --output task2_cde_pipeline/output/scrnaseq_cde_harmonized.tsv
+    --output task2_cde_pipeline/output/<your_dataset>_cde_harmonized.tsv
 ```
 
-Output:
-```
-[Pipeline] Consortium / dataset: PanKbase-scRNAseq
-[Pipeline] CDE schema: PanKbase scRNA-seq Metadata CDEs
-[Pipeline] Data format: rds
-[Pipeline] Loaded 227 source records
-[Pipeline] Harmonized 227 records
-[Pipeline] Validation warnings: 0
-```
-
-First few rows:
-
-| sample_id | donor_rrid_ref | study_accession | library_chemistry | mean_umi_count_per_cell | mean_genes_per_cell | mean_pct_mitochondrial_reads |
-|---|---|---|---|---|---|---|
-| HP-21070-01__DHT_10nM | HP-21070-01 | GSE201256 | V3 | 25005.05 | 4801.12 | 4.62 |
-| HP-21070-01__EtOH | HP-21070-01 | GSE201256 | V3 | 28827.58 | 5470.32 | 7.54 |
-
-To build a fully-annotated sample table, join scRNA-seq output to the donor output on `donor_rrid_ref == donor_rrid`.
+No reference mapping is shipped at this time — write one using `hpap_mapping.json` as a template, or let Claude Code draft one for you with `/generate-mapping`. To build a fully-annotated sample table, join scRNA-seq output to the donor output on `donor_rrid_ref == donor_rrid`.
 
 ## Pipeline Workflow
 
@@ -153,7 +136,7 @@ pankbase_cde_pipeline/
 ├── .gitignore
 ├── data/                                          # Example data
 │   ├── HPAP_Donor_Summary_197.xlsx                # 197 HPAP donors
-│   └── metadata_for_DEG.rds                       # 227 scRNA-seq samples
+│   └── metadata_for_DEG.rds                       # 227 scRNA-seq samples (historical reference; not aligned to scRNA-seq CDE v0.2 schema)
 ├── task1_cde_definitions/                         # Task 1: Formal CDE definitions
 │   ├── pankbase_donor_cdes.md                     # 34 donor CDEs (human-readable)
 │   ├── pankbase_donor_cdes.json                   # 34 donor CDEs (machine-readable)
@@ -163,8 +146,7 @@ pankbase_cde_pipeline/
 │   ├── README.md                                  # Pipeline documentation
 │   ├── pipeline.py                                # Main script (Excel + RDS)
 │   ├── mappings/
-│   │   ├── hpap_mapping.json                      # HPAP donor → donor CDE
-│   │   └── pankbase_scrnaseq_mapping.json         # RDS → scRNA-seq CDE
+│   │   └── hpap_mapping.json                      # HPAP donor → donor CDE
 │   ├── tests/
 │   │   └── test_pipeline.py
 │   └── output/                                    # Harmonized TSVs + validation reports
@@ -191,20 +173,15 @@ pankbase_cde_pipeline/
 
 Full definitions in [task1_cde_definitions/pankbase_donor_cdes.md](task1_cde_definitions/pankbase_donor_cdes.md).
 
-### scRNA-seq CDE Collection — 20 CDEs (v0.1)
+### scRNA-seq CDE Collection — 20 CDEs (v0.2)
 
 | Category | Count | Key Fields |
 |---|---|---|
-| Sample Identification | 3 | `sample_id`, `donor_rrid_ref` (FK → PKB_D_001), `study_accession` |
-| Library & Platform | 6 | `library_chemistry`, `library_prep_kit`*, `sequencing_platform`*, `alignment_tool`*, `reference_genome`*, `cellranger_version`* |
-| Cell Calling | 1 | `n_cells`* |
-| Sequencing QC | 6 | mean per-cell UMI, genes, total reads, uniquely mapped, secondary / supplementary alignments |
-| Ambient RNA (CellBender) | 3 | mean cell probability, post-CellBender UMIs, % UMIs removed |
-| Mitochondrial QC | 1 | mean % mitochondrial reads |
+| Sample Identification | 2 | `sample_id`, `donor_rrid_ref` (FK → PKB_D_001) |
+| Single Cell/Nucleus Preparation | 15 | `assay_resolution`, `modality`, `assay_platform`, `reagent_kit`, `treatment_protocol`, `growth_protocol`, `extracted_molecule`, `extraction_protocol`, `library_construction_protocol`, `library_selection`, `sequencing_run_type`, `sequencing_instrument`, `read_length_configuration`, `demultiplexed_read_lengths`, `number_of_target_cells` |
+| Processing Steps | 3 | `processing_workflow_overview`, `processing_workflow_code`, `genome_build` |
 
-`*` = inferred (not in the reference RDS; commonly-expected scRNA-seq metadata).
-
-Full definitions in [task1_cde_definitions/pankbase_scrnaseq_cdes.md](task1_cde_definitions/pankbase_scrnaseq_cdes.md).
+Field list sourced from a collaborator-curated metadata spreadsheet. Full definitions in [task1_cde_definitions/pankbase_scrnaseq_cdes.md](task1_cde_definitions/pankbase_scrnaseq_cdes.md).
 
 ## Validation Report (HPAP example)
 

@@ -7,7 +7,7 @@ Thank you for your interest in contributing! This project welcomes contributions
 If you have donor metadata or scRNA-seq sample metadata from a consortium / dataset not yet supported:
 
 1. Place a sample data file in `data/` (`.xlsx` for donor spreadsheets, `.rds` for R-side tabular exports)
-2. Create a mapping JSON in `task2_cde_pipeline/mappings/<name>_mapping.json`. Use `hpap_mapping.json` (donor/Excel) or `pankbase_scrnaseq_mapping.json` (scRNA-seq/RDS) as a template. Set `data_format` to `hpap_excel`, `iidp_excel`, or `rds`.
+2. Create a mapping JSON in `task2_cde_pipeline/mappings/<name>_mapping.json`. Use `hpap_mapping.json` (donor/Excel) as a structural template. Set `data_format` to `hpap_excel`, `iidp_excel`, or `rds`.
 3. Pick the right `--cde` schema at run time:
    - `task1_cde_definitions/pankbase_donor_cdes.json` for donor-level metadata
    - `task1_cde_definitions/pankbase_scrnaseq_cdes.json` for scRNA-seq sample metadata

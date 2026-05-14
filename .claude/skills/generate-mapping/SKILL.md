@@ -18,9 +18,11 @@ You are generating a column mapping configuration for PanKbase CDE harmonization
 
 ### 1. Detect file type and pick the CDE schema
 
-- `.xlsx` / `.xls` → most commonly donor-level metadata. Load with `openpyxl`. Target schema: `task1_cde_definitions/pankbase_donor_cdes.json`. Set `data_format` to `hpap_excel` (named-column headers) or `iidp_excel` (positional + header row offset).
-- `.rds` → R data.frame, most commonly scRNA-seq sample metadata. Load with `pyreadr`. Target schema: `task1_cde_definitions/pankbase_scrnaseq_cdes.json`. Set `data_format` to `rds`.
-- If uncertain (e.g., an Excel that looks like scRNA-seq QC), inspect the columns and ask the user which CDE schema to target.
+- `.xlsx` / `.xls` → could be either donor-level (most common) OR sample-level scRNA-seq metadata. Load with `openpyxl`. Inspect column names to decide:
+  - Donor fields (Age, BMI, Sex, RRID, diabetes status, etc.) → `task1_cde_definitions/pankbase_donor_cdes.json`. Set `data_format` to `hpap_excel` or `iidp_excel`.
+  - scRNA-seq fields (modality, assay platform, reagent kit, sequencing instrument, genome build, etc.) → `task1_cde_definitions/pankbase_scrnaseq_cdes.json`. Set `data_format` to `hpap_excel` (the loader works for any named-column Excel).
+- `.rds` → R data.frame. Load with `pyreadr`. Set `data_format` to `rds`. Inspect columns to pick the right CDE schema.
+- If uncertain, inspect the columns and ask the user which CDE schema to target.
 
 ### 2. Inspect the source data
 
@@ -54,8 +56,8 @@ For each CDE field, determine:
 
 Typical matches:
 - Donor: `Age (years)` → `age_years`; `Sex` → `sex_at_birth`; `BMI` → `bmi`; `RRID:SAMN...` → `donor_rrid`; `T1D`/`T2D` → `diabetes_status`
-- scRNA-seq: `samples` → `sample_id`; `rrid` → `donor_rrid_ref`; `study`/`GSE...` → `study_accession`; `chemistry` (`V2`/`V3`) → `library_chemistry`; `mean_nCount_RNA` → `mean_umi_count_per_cell`; `mean_nFeature_RNA` → `mean_genes_per_cell`; `mean_rna_pct_mitochondrial` → `mean_pct_mitochondrial_reads`
-- If a CDE has no matching source column, set transform to `not_available` and add a `_note` explaining why (e.g., `"Inferred CDE; not present in the source RDS."`)
+- scRNA-seq (v0.2 schema): `sample` / `library_id` → `sample_id`; `rrid` / `donor_id` → `donor_rrid_ref`; `cell`/`nucleus` → `assay_resolution`; `RNA` / `ATAC` / `multiome` → `modality`; `10x` / `Fluidigm` → `assay_platform`; `Chromium...` / `10X-Chromium-GEX-3p-v3` → `reagent_kit`; `paired-end` / `single-end` → `sequencing_run_type`; `Illumina NovaSeq 6000` → `sequencing_instrument`; `101x101` → `read_length_configuration`; `26x98` → `demultiplexed_read_lengths`; numeric → `number_of_target_cells`; `GRCh38` / `GRCh38.93` → `genome_build`
+- If a CDE has no matching source column, set transform to `not_available` and add a `_note` explaining why (e.g., `"Source has no field for this CDE."`)
 
 ### 5. Generate the mapping JSON
 
@@ -105,7 +107,7 @@ python3 task2_cde_pipeline/pipeline.py \
 
 ## Important guidelines
 
-- Prefer reading existing mapping files (`hpap_mapping.json`, `pankbase_scrnaseq_mapping.json`) as examples
+- Prefer reading the existing `hpap_mapping.json` as a structural example (it covers most transforms in use)
 - Be conservative with `value_map`s: only map values you are confident about; use `"Unknown"` as default for uncertain cases
 - For columns with non-standard formats, add a `_note` in the mapping explaining the issue
 - Respect the project scope: for scRNA-seq files, skip donor-scope columns (sex, age, BMI, etc.) — they live in the donor CDE collection and are joined via `donor_rrid_ref`
