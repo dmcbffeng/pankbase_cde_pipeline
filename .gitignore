@@ -56,6 +56,9 @@ scRNAseq_metadata.xlsx
 # Presentation materials (local-only)
 slides/
 
+# Word-document exports for collaborator sharing (local-only)
+task1_cde_definitions/*.docx
+
 # IIDP data is not yet publicly available — do not publish
 data/IIDP_HIPP_Report.xlsx
 task2_cde_pipeline/mappings/iidp_mapping.json
