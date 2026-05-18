@@ -152,7 +152,8 @@ The output TSV has one row per source record and one column per CDE in the suppl
 | program_donor_id | Identification | Text |
 | cohort_id | Identification | Value List |
 | sex_at_birth | Demographics | Value List |
-| age_years | Demographics | Number |
+| age | Demographics | Number |
+| age_unit | Demographics | Value List |
 | bmi | Demographics | Number |
 | ethnicity | Demographics | Value List |
 | race | Demographics | Value List |
@@ -180,10 +181,9 @@ The output TSV has one row per source record and one column per CDE in the suppl
 | warm_ischemia_time_hours | Processing | Number |
 | organ_source | Processing | Text |
 | pancreas_weight_g | Processing | Number |
-| islet_viability_pre_percent | Processing | Number |
-| islet_purity_pre_percent | Processing | Number |
+| estimated_islet_viability_pre_percent | Processing | Number |
+| estimated_islet_purity_pre_percent | Processing | Number |
 | pre_shipment_culture_time_hours | Processing | Number |
-| pre_shipment_islet_function_available | Processing | Value List |
 | islet_viability_post_percent | Transportation | Number |
 | islet_purity_post_percent | Transportation | Number |
 | total_culture_time_hours | Transportation | Number |
@@ -232,7 +232,7 @@ merged = samples.merge(donors, left_on="donor_rrid_ref", right_on="donor_rrid", 
 Field Completeness:
   donor_rrid: 195/197 (99.0%)
   sex_at_birth: 197/197 (100.0%)
-  age_years: 197/197 (100.0%)
+  age: 197/197 (100.0%)
   diabetes_status: 197/197 (100.0%)
   hba1c_percent: 190/197 (96.4%)
   ...

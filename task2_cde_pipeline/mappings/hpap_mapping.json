@@ -26,9 +26,16 @@
       },
       "default": "Unknown"
     },
-    "age_years": {
+    "age": {
       "source_column": "age_years",
-      "transform": "numeric"
+      "transform": "numeric",
+      "notes": "HPAP source column is named 'age_years'; CDE 'age' is unit-agnostic with the unit in 'age_unit'"
+    },
+    "age_unit": {
+      "source_column": null,
+      "transform": "constant",
+      "constant_value": "Years",
+      "notes": "HPAP reports donor age in whole years"
     },
     "bmi": {
       "source_column": "bmi",
@@ -199,11 +206,11 @@
       "source_column": "pancreas_weight_trimmed_grams",
       "transform": "numeric"
     },
-    "islet_viability_pre_percent": {
+    "estimated_islet_viability_pre_percent": {
       "source_column": "islet_viability_percent",
       "transform": "numeric"
     },
-    "islet_purity_pre_percent": {
+    "estimated_islet_purity_pre_percent": {
       "source_column": null,
       "transform": "not_available",
       "notes": "HPAP does not have a single pre-shipment purity field in the donor sheet"
@@ -212,11 +219,6 @@
       "source_column": null,
       "transform": "not_available",
       "notes": "Not directly available in HPAP donor sheet; may be derivable from datetime fields"
-    },
-    "pre_shipment_islet_function_available": {
-      "source_column": "gsir_si",
-      "transform": "presence_to_yes_no",
-      "notes": "If gsir_si has a numeric value -> 'Yes', otherwise 'No'"
     },
     "islet_viability_post_percent": {
       "source_column": null,

@@ -1,4 +1,4 @@
-# PanKbase Donor Metadata: Common Data Element (CDE) Collection v1.0
+# PanKbase Donor Metadata: Common Data Element (CDE) Collection v1.1
 
 ## Overview
 
@@ -111,19 +111,42 @@ CDEs are organized by category: Donor Identification, Demographics, Medical, Aut
 | Attribute | Value |
 |-----------|-------|
 | **CDE ID** | PKB_D_005 |
-| **CDE Name** | age_years |
+| **CDE Name** | age |
 | **Question Text** | What is the donor's age at the time of donation? |
-| **Definition** | The age of the donor at the time of organ/tissue procurement, reported in years. For donors younger than 2 years (24 months), age should be reported in months to maintain precision. Age is calculated from date of birth to date of procurement. This is a core demographic variable required for all biomedical research. |
+| **Definition** | The age of the donor at the time of organ/tissue procurement, expressed as a unit-agnostic numeric value. The unit is recorded separately in the companion element `age_unit` (PKB_D_005u). For donors younger than 2 years (24 months), age should be reported in months to maintain precision. Age is calculated from date of birth to date of procurement. This is a core demographic variable required for all biomedical research. |
 | **Data Type** | Number |
-| **Input Restrictions** | Non-negative numeric value. If donor age < 2 years, report in months with `age_unit` = "months". Otherwise, report as integer years. Range: 0-120 years. |
+| **Input Restrictions** | Non-negative numeric value. If donor age < 2 years, report in months and set `age_unit` (PKB_D_005u) = `Months`. Otherwise, report in years with `age_unit` = `Years`. Range: 0-120 in the reported unit. |
 | **Permissible Values** | N/A (numeric) |
-| **Unit of Measure** | Years (UCUM: `a`); or Months (UCUM: `mo`) for donors < 24 months |
-| **NIH CDE Reference** | Maps to NIH CDE "Age at Enrollment" / "Person Age" concepts. NIH Inclusion Across the Lifespan policy requires age at enrollment. NIH CDE Repository recommends reporting in months for young children. The PanKbase Tier 0 "Age (years)" is a strictly required field. |
+| **Unit of Measure** | Not fixed — recorded by the companion CDE `age_unit` (PKB_D_005u). UCUM equivalents: `a` (years), `mo` (months), `wk` (weeks), `d` (days). |
+| **NIH CDE Reference** | Maps to NIH CDE "Age at Enrollment" / "Person Age" concepts. NIH Inclusion Across the Lifespan policy requires age at enrollment. NIH CDE Repository recommends reporting in months for young children, paired with an age-unit element. The PanKbase Tier 0 "Age" is a strictly required field. |
 | **Terminology Binding** | UCUM for units |
 | **PanKbase Tier** | Required |
 | **PanKbase Standard Tier** | Tier 0 |
 | **Example Values** | `43`, `26`, `47`, `5` (months, for infant donors) |
 | **Mapping Notes** | HPAP field: `age_years` (integer). IIDP field: `Age (years)` (integer string). Both report in whole years. |
+| **Related Elements** | PKB_D_005u (age_unit) — records the unit the numeric age value is expressed in. |
+
+---
+
+### CDE PKB_D_005u: Age Unit
+
+| Attribute | Value |
+|-----------|-------|
+| **CDE ID** | PKB_D_005u |
+| **CDE Name** | age_unit |
+| **Question Text** | In what unit is the donor's age reported? |
+| **Definition** | The unit of measure in which the donor's age (PKB_D_005) is expressed. The numeric age value is unit-agnostic; this companion element makes the unit explicit so that ages reported in months for infant donors are not misread as years. For donors younger than 2 years (24 months), age should be reported in months (or finer) to maintain precision. |
+| **Data Type** | Value List |
+| **Input Restrictions** | Single selection from permissible values. Required field. Defaults to `Years` when not otherwise specified. |
+| **Permissible Values** | `Years` = Age expressed in years; `Months` = Age expressed in months (use for donors < 24 months); `Weeks` = Age expressed in weeks; `Days` = Age expressed in days (neonatal donors) |
+| **Unit of Measure** | N/A |
+| **NIH CDE Reference** | Maps to the NIH CDE Repository / NCI caDSR "Age Unit of Measure" CDE concept, a standard companion element to age CDEs. NIH guidance recommends reporting age in months (or finer) for young children. |
+| **Terminology Binding** | NCI Thesaurus: C29848 (Year), C29846 (Month), C29844 (Week), C25301 (Day) |
+| **PanKbase Tier** | Required |
+| **PanKbase Standard Tier** | Tier 0 |
+| **Example Values** | `Years`, `Months` |
+| **Related Elements** | PKB_D_005 (age) — the numeric age value this unit applies to. |
+| **Mapping Notes** | HPAP and IIDP both report donor age in whole years; map with a constant value `Years`. Override only for sources that report infant ages in months. |
 
 ---
 
@@ -630,7 +653,7 @@ CDEs are organized by category: Donor Identification, Demographics, Medical, Aut
 | Attribute | Value |
 |-----------|-------|
 | **CDE ID** | PKB_D_028 |
-| **CDE Name** | islet_viability_pre_percent |
+| **CDE Name** | estimated_islet_viability_pre_percent |
 | **Question Text** | What is the estimated islet viability before shipment? |
 | **Definition** | The percentage of viable islets in the preparation, assessed by dye exclusion or similar viability assay prior to shipment from the isolation center. This is a key quality control measure for islet preparations. |
 | **Data Type** | Number |
@@ -651,7 +674,7 @@ CDEs are organized by category: Donor Identification, Demographics, Medical, Aut
 | Attribute | Value |
 |-----------|-------|
 | **CDE ID** | PKB_D_029 |
-| **CDE Name** | islet_purity_pre_percent |
+| **CDE Name** | estimated_islet_purity_pre_percent |
 | **Question Text** | What is the estimated islet purity before shipment? |
 | **Definition** | The percentage of islet tissue in the total preparation, assessed by dithizone (DTZ) staining or similar method prior to shipment. Islet purity reflects the proportion of endocrine tissue relative to exocrine and other contaminant tissue. |
 | **Data Type** | Number |
@@ -685,27 +708,6 @@ CDEs are organized by category: Donor Identification, Demographics, Medical, Aut
 | **PanKbase Standard Tier** | N/A |
 | **Example Values** | `115`, `75`, `24`, `48` |
 | **Mapping Notes** | HPAP: can be derived from `biopsy_islet_isolation_datetime_est` and shipment records. IIDP field: `Pre-shipment Culture Time (hours)`. Direct mapping from IIDP. |
-
----
-
-### CDE PKB_D_031: Pre-Shipment Islet Function Available
-
-| Attribute | Value |
-|-----------|-------|
-| **CDE ID** | PKB_D_031 |
-| **CDE Name** | pre_shipment_islet_function_available |
-| **Question Text** | Are pre-shipment islet function assessment results available? |
-| **Definition** | Indicates whether glucose-stimulated insulin secretion (GSIS) or other functional assessments of the islet preparation were performed prior to shipment. |
-| **Data Type** | Value List |
-| **Input Restrictions** | Single selection. |
-| **Permissible Values** | `Yes` = Pre-shipment islet function data is available; `No` = Pre-shipment islet function was not assessed or data is not available |
-| **Unit of Measure** | N/A |
-| **NIH CDE Reference** | PanKbase-defined. |
-| **Terminology Binding** | N/A |
-| **PanKbase Tier** | Desired |
-| **PanKbase Standard Tier** | N/A |
-| **Example Values** | `Yes`, `No` |
-| **Mapping Notes** | HPAP: derived from presence/absence of `gsir_si` value. IIDP: not in standard HIPP report. |
 
 ---
 
@@ -782,7 +784,8 @@ CDEs are organized by category: Donor Identification, Demographics, Medical, Aut
 | PKB_D_002 | program_donor_id | Donor ID | Text | Required | Partial |
 | PKB_D_003 | cohort_id | Donor ID | Value List | Required | No |
 | PKB_D_004 | sex_at_birth | Demographics | Value List | Required | Yes |
-| PKB_D_005 | age_years | Demographics | Number | Required | Yes |
+| PKB_D_005 | age | Demographics | Number | Required | Yes |
+| PKB_D_005u | age_unit | Demographics | Value List | Required | Yes (caDSR) |
 | PKB_D_006 | bmi | Demographics | Number | Required | Yes |
 | PKB_D_007 | race_ethnicity | Demographics | Composite | Required | Yes (OMB) |
 | PKB_D_008 | diabetes_status | Medical | Value List | Required | No (PanKbase-defined) |
@@ -805,10 +808,9 @@ CDEs are organized by category: Donor Identification, Demographics, Medical, Aut
 | PKB_D_025 | warm_ischemia_time_hours | Processing | Number | Required | No |
 | PKB_D_026 | organ_source | Processing | Text | Desired | No |
 | PKB_D_027 | pancreas_weight_g | Processing | Number | Desired | No |
-| PKB_D_028 | islet_viability_pre_percent | Processing | Number | Desired | No |
-| PKB_D_029 | islet_purity_pre_percent | Processing | Number | Desired | No |
+| PKB_D_028 | estimated_islet_viability_pre_percent | Processing | Number | Desired | No |
+| PKB_D_029 | estimated_islet_purity_pre_percent | Processing | Number | Desired | No |
 | PKB_D_030 | pre_shipment_culture_time_hours | Processing | Number | Required | No |
-| PKB_D_031 | pre_shipment_islet_function_available | Processing | Value List | Desired | No |
 | PKB_D_032 | islet_viability_post_percent | Transportation | Number | Required | No |
 | PKB_D_033 | islet_purity_post_percent | Transportation | Number | Required | No |
 | PKB_D_034 | total_culture_time_hours | Transportation | Number | Required | No |
@@ -834,3 +836,4 @@ CDEs are organized by category: Donor Identification, Demographics, Medical, Aut
 | Version | Date | Description |
 |---------|------|-------------|
 | 1.0 | 2026-04-21 | Initial CDE collection based on PANKBASE META DATA_MB.xlsx (Required + Desired fields) |
+| 1.1 | 2026-05-18 | Renamed PKB_D_005 `age_years` → `age` (unit-agnostic) and added PKB_D_005u (age_unit) companion element. Renamed PKB_D_028/029 to `estimated_islet_viability_pre_percent` / `estimated_islet_purity_pre_percent`. Removed PKB_D_031 (pre_shipment_islet_function_available); its ID is retired and not reused. |

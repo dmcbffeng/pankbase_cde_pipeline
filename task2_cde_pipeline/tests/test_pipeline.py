@@ -34,9 +34,9 @@ def run_pipeline(data, mapping, output, cde=None):
 def test_cde_schema_loads():
     with open(CDE) as f:
         schema = json.load(f)
-    assert schema["schema_version"] == "1.0"
+    assert schema["schema_version"] == "1.1"
     assert len(schema["cdes"]) >= 34, "Expected at least 34 CDEs"
-    required_names = {"donor_rrid", "sex_at_birth", "age_years", "bmi", "diabetes_status"}
+    required_names = {"donor_rrid", "sex_at_birth", "age", "age_unit", "bmi", "diabetes_status"}
     names = {c["cde_name"] for c in schema["cdes"]}
     assert required_names.issubset(names)
 

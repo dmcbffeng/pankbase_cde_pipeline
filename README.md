@@ -4,7 +4,7 @@ Common Data Elements (CDEs) and a harmonization pipeline for pancreas research m
 
 Currently ships two CDE collections:
 
-1. **PanKbase Donor Metadata CDEs (v1.0)** — 34 CDEs for pancreas donor demographics, medical history, autoantibodies, isolation, and transportation.
+1. **PanKbase Donor Metadata CDEs (v1.1)** — 34 CDEs for pancreas donor demographics, medical history, autoantibodies, isolation, and transportation.
 2. **PanKbase scRNA-seq Metadata CDEs (v0.2)** — 20 CDEs for single-cell / single-nucleus RNA-seq sample-level metadata (assay resolution, modality, platform, reagent kit, library construction, sequencing run configuration, and processing-step pointers). The field list is sourced from a collaborator-curated metadata spreadsheet. Links back to donor CDEs via a `donor_rrid_ref` foreign-key CDE rather than duplicating donor fields.
 
 ## Features
@@ -53,12 +53,12 @@ Output:
 
 First few rows:
 
-| donor_rrid | program_donor_id | cohort_id | sex_at_birth | age_years | bmi | diabetes_status | hba1c_percent |
-|---|---|---|---|---|---|---|---|
-| RRID:SAMN18741978 | HPAP-001 | HPAP | Male | 47 | 32.2 | Type 2 diabetes (T2D) | 5.7 |
-| RRID:SAMN19763626 | HPAP-002 | HPAP | Male | 26 | 16.4 | Type 1 diabetes (T1D) | 9.8 |
-| RRID:SAMN18741941 | HPAP-003 | HPAP | Male | 29 | 24.5 | No diabetes | 5.6 |
-| RRID:SAMN19776437 | HPAP-004 | HPAP | Female | 24 | 32.2 | No diabetes | 5.4 |
+| donor_rrid | program_donor_id | cohort_id | sex_at_birth | age | age_unit | bmi | diabetes_status | hba1c_percent |
+|---|---|---|---|---|---|---|---|---|
+| RRID:SAMN18741978 | HPAP-001 | HPAP | Male | 47 | Years | 32.2 | Type 2 diabetes (T2D) | 5.7 |
+| RRID:SAMN19763626 | HPAP-002 | HPAP | Male | 26 | Years | 16.4 | Type 1 diabetes (T1D) | 9.8 |
+| RRID:SAMN18741941 | HPAP-003 | HPAP | Male | 29 | Years | 24.5 | No diabetes | 5.6 |
+| RRID:SAMN19776437 | HPAP-004 | HPAP | Female | 24 | Years | 32.2 | No diabetes | 5.4 |
 
 ### scRNA-seq sample metadata
 
@@ -160,15 +160,15 @@ pankbase_cde_pipeline/
 
 ## CDE Categories
 
-### Donor CDE Collection — 34 CDEs (v1.0)
+### Donor CDE Collection — 34 CDEs (v1.1)
 
 | Category | Count | Key Fields |
 |---|---|---|
 | Donor Identification | 3 | RRID, Program Donor ID, Cohort ID |
-| Demographics | 5 | Sex at Birth, Age, BMI, Ethnicity, Race |
+| Demographics | 6 | Sex at Birth, Age, Age Unit, BMI, Ethnicity, Race |
 | Medical | 10 | Diabetes Status, HbA1c, C-Peptide, Cause of Death, ... |
 | Autoantibodies | 8 | GADA, IAA, IA-2, ZnT8 (positive + value) |
-| Pancreas Processing | 9 | Cold/Warm Ischemia, Pancreas Weight, Islet Viability/Purity |
+| Pancreas Processing | 8 | Cold/Warm Ischemia, Pancreas Weight, Estimated Islet Viability/Purity |
 | Sample Transportation | 3 | Post-Shipment Viability/Purity, Total Culture Time |
 
 Full definitions in [task1_cde_definitions/pankbase_donor_cdes.md](task1_cde_definitions/pankbase_donor_cdes.md).
@@ -189,7 +189,8 @@ Field list sourced from a collaborator-curated metadata spreadsheet. Full defini
 Field Completeness:
   donor_rrid: 195/197 (99.0%)
   sex_at_birth: 197/197 (100.0%)
-  age_years: 197/197 (100.0%)
+  age: 197/197 (100.0%)
+  age_unit: 197/197 (100.0%)
   bmi: 197/197 (100.0%)
   diabetes_status: 197/197 (100.0%)
   hba1c_percent: 190/197 (96.4%)

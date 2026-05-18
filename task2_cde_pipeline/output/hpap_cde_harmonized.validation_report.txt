@@ -1,7 +1,7 @@
 PanKbase CDE Harmonization Validation Report
 Consortium: HPAP
 Source: data/HPAP_Donor_Summary_197.xlsx
-Date: 2026-04-23T20:33:10.957966
+Date: 2026-05-18T08:26:58.934730
 Total records: 197
 Total warnings: 1115
 
@@ -12,7 +12,8 @@ Field Completeness:
   program_donor_id: 197/197 (100.0%)
   cohort_id: 197/197 (100.0%)
   sex_at_birth: 197/197 (100.0%)
-  age_years: 197/197 (100.0%)
+  age: 197/197 (100.0%)
+  age_unit: 197/197 (100.0%)
   bmi: 197/197 (100.0%)
   ethnicity: 197/197 (100.0%)
   race: 197/197 (100.0%)
@@ -40,10 +41,9 @@ Field Completeness:
   warm_ischemia_time_hours: 75/197 (38.1%)
   organ_source: 148/197 (75.1%)
   pancreas_weight_g: 192/197 (97.5%)
-  islet_viability_pre_percent: 181/197 (91.9%)
-  islet_purity_pre_percent: 0/197 (0.0%)
+  estimated_islet_viability_pre_percent: 181/197 (91.9%)
+  estimated_islet_purity_pre_percent: 0/197 (0.0%)
   pre_shipment_culture_time_hours: 0/197 (0.0%)
-  pre_shipment_islet_function_available: 197/197 (100.0%)
   islet_viability_post_percent: 0/197 (0.0%)
   islet_purity_post_percent: 0/197 (0.0%)
   total_culture_time_hours: 0/197 (0.0%)

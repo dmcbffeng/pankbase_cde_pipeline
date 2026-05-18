@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "schema_name": "PanKbase Donor Metadata CDEs",
   "created_date": "2026-04-21",
   "description": "Machine-readable CDE definitions for PanKbase donor metadata harmonization",
@@ -56,18 +56,37 @@
     },
     {
       "cde_id": "PKB_D_005",
-      "cde_name": "age_years",
+      "cde_name": "age",
       "question_text": "What is the donor's age at the time of donation?",
       "category": "Demographics",
       "data_type": "number",
       "required": true,
       "pankbase_tier": "Required",
-      "unit": "years",
-      "unit_ucum": "a",
+      "unit": null,
+      "unit_cde": "PKB_D_005u",
       "min_value": 0,
       "max_value": 120,
       "nih_cde_reference": "Age at Enrollment / Person Age",
-      "notes": "For donors < 2 years old, report in months with unit='months'"
+      "notes": "For donors younger than 2 years, report the value in months (or finer) and set age_unit (PKB_D_005u) accordingly. The numeric value is unit-agnostic; the companion CDE age_unit records the unit.",
+      "related_elements": ["age_unit"]
+    },
+    {
+      "cde_id": "PKB_D_005u",
+      "cde_name": "age_unit",
+      "question_text": "In what unit is the donor's age reported?",
+      "category": "Demographics",
+      "data_type": "value_list",
+      "required": true,
+      "pankbase_tier": "Required",
+      "unit": null,
+      "permissible_values": ["Years", "Months", "Weeks", "Days"],
+      "default": "Years",
+      "nih_cde_reference": "Age Unit of Measure (NIH CDE Repository / NCI caDSR)",
+      "terminology_binding": {
+        "NCI_Thesaurus": {"Years": "C29848", "Months": "C29846", "Weeks": "C29844", "Days": "C25301"}
+      },
+      "related_elements": ["age"],
+      "notes": "Companion to PKB_D_005 (age). Report 'Months' (or finer) for donors younger than 2 years (24 months) to preserve precision; 'Years' otherwise."
     },
     {
       "cde_id": "PKB_D_006",
@@ -438,7 +457,7 @@
     },
     {
       "cde_id": "PKB_D_028",
-      "cde_name": "islet_viability_pre_percent",
+      "cde_name": "estimated_islet_viability_pre_percent",
       "question_text": "What is the estimated islet viability before shipment?",
       "category": "Pancreas Processing",
       "data_type": "number",
@@ -451,7 +470,7 @@
     },
     {
       "cde_id": "PKB_D_029",
-      "cde_name": "islet_purity_pre_percent",
+      "cde_name": "estimated_islet_purity_pre_percent",
       "question_text": "What is the estimated islet purity before shipment?",
       "category": "Pancreas Processing",
       "data_type": "number",
@@ -474,17 +493,6 @@
       "unit_ucum": "h",
       "min_value": 0,
       "max_value": 168
-    },
-    {
-      "cde_id": "PKB_D_031",
-      "cde_name": "pre_shipment_islet_function_available",
-      "question_text": "Are pre-shipment islet function assessment results available?",
-      "category": "Pancreas Processing",
-      "data_type": "value_list",
-      "required": false,
-      "pankbase_tier": "Desired",
-      "unit": null,
-      "permissible_values": ["Yes", "No"]
     },
     {
       "cde_id": "PKB_D_032",

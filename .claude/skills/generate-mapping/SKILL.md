@@ -55,7 +55,7 @@ For each CDE field, determine:
 - **What value_map** is needed (for enumerated fields, map source values to CDE permissible values)
 
 Typical matches:
-- Donor: `Age (years)` → `age_years`; `Sex` → `sex_at_birth`; `BMI` → `bmi`; `RRID:SAMN...` → `donor_rrid`; `T1D`/`T2D` → `diabetes_status`
+- Donor: `Age (years)` → `age` (and set `age_unit` via a `constant` transform, e.g. `Years`); `Sex` → `sex_at_birth`; `BMI` → `bmi`; `RRID:SAMN...` → `donor_rrid`; `T1D`/`T2D` → `diabetes_status`
 - scRNA-seq (v0.2 schema): `sample` / `library_id` → `sample_id`; `rrid` / `donor_id` → `donor_rrid_ref`; `cell`/`nucleus` → `assay_resolution`; `RNA` / `ATAC` / `multiome` → `modality`; `10x` / `Fluidigm` → `assay_platform`; `Chromium...` / `10X-Chromium-GEX-3p-v3` → `reagent_kit`; `paired-end` / `single-end` → `sequencing_run_type`; `Illumina NovaSeq 6000` → `sequencing_instrument`; `101x101` → `read_length_configuration`; `26x98` → `demultiplexed_read_lengths`; numeric → `number_of_target_cells`; `GRCh38` / `GRCh38.93` → `genome_build`
 - If a CDE has no matching source column, set transform to `not_available` and add a `_note` explaining why (e.g., `"Source has no field for this CDE."`)
 
